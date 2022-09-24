@@ -253,7 +253,14 @@ public class Animal_Behavior // имитация поведения животн
         System.out.println(list);
         System.out.println(newBorn);
         list.addAll(newBorn);
-        Collections.sort(list, new AnimalComparator());
+        try {
+            Collections.sort(list, AnimalComparator.class.newInstance());
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
 
         System.out.println(list);
     }

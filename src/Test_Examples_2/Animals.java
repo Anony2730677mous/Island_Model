@@ -2,6 +2,7 @@ package Test_Examples_2;
 
 
 import java.util.Comparator;
+import java.util.Objects;
 
 abstract class Living_Entity // для создания абстрактных типов животных
 {
@@ -39,6 +40,19 @@ abstract class Animal extends Living_Entity // животные
 }
 public class Animals extends Animal// для создания конкретных типов животных
 {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animals animals = (Animals) o;
+        return count == animals.count;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(count);
+    }
+
     int count;
     @Override
     void multiplay(boolean multiplay) {
@@ -71,6 +85,19 @@ public class Animals extends Animal// для создания конкретны
 
     class Plant extends Living_Entity // трава
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Plant plant = (Plant) o;
+            return count == plant.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         @Override
         void multiplay(boolean multiplay) {
 
@@ -190,6 +217,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Wolf extends Predatory_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Wolf wolf = (Wolf) o;
+            return count == wolf.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -259,6 +299,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Boa extends Predatory_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Boa boa = (Boa) o;
+            return count == boa.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -326,6 +379,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Fox extends Predatory_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Fox fox = (Fox) o;
+            return count == fox.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -393,6 +459,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Bear extends Predatory_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Bear bear = (Bear) o;
+            return count == bear.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -460,6 +539,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Eagle extends Predatory_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Eagle eagle = (Eagle) o;
+            return count == eagle.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -527,6 +619,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Horse extends Herbivorous_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Horse horse = (Horse) o;
+            return count == horse.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -593,6 +698,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Deer extends Herbivorous_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Deer deer = (Deer) o;
+            return count == deer.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -658,6 +776,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Rabbit extends Herbivorous_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Rabbit rabbit = (Rabbit) o;
+            return count == rabbit.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -723,6 +854,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Mouse extends Herbivorous_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Mouse goat = (Mouse) o;
+            return count == goat.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -789,6 +933,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Goat extends Herbivorous_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Goat goat = (Goat) o;
+            return count == goat.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
         private boolean multiplay;
 
         @Override
@@ -855,6 +1012,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Sheep extends Herbivorous_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Sheep that = (Sheep) o;
+            return count == that.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
         private boolean multiplay;
 
         @Override
@@ -920,6 +1089,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Hog extends Herbivorous_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Hog that = (Hog) o;
+            return count == that.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
         private boolean multiplay;
 
         @Override
@@ -986,6 +1167,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Buffalo extends Herbivorous_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Buffalo that = (Buffalo) o;
+            return count == that.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
         private boolean multiplay;
 
         @Override
@@ -1053,6 +1246,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Duck extends Herbivorous_Animal
     {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Duck that = (Duck) o;
+            return count == that.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
         private boolean multiplay;
 
         @Override
@@ -1130,7 +1335,20 @@ public class Animals extends Animal// для создания конкретны
     }
     class Caterpillar extends Herbivorous_Animal
     {
-        private boolean multiplay = false;
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Caterpillar that = (Caterpillar) o;
+            return count == that.count;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(count);
+        }
+
+        private boolean multiplay;
 
         @Override
         void multiplay(boolean multiplay) {
@@ -1182,15 +1400,30 @@ public class Animals extends Animal// для создания конкретны
         }
     }
 }
-class AnimalComparator implements Comparator<Living_Entity>
+class AnimalNameComparator implements Comparator<Living_Entity>
 {
     @Override
     public int compare(Living_Entity o1, Living_Entity o2)
     {
-        int toStringCompare = o1.toString().compareTo(o2.toString());
-        //int countCompare = o1.count - o2.count;
+        int toStringCompare = o1.toString().compareToIgnoreCase(o2.toString());
         return  toStringCompare;
     }
+}
+class AnimalCountComparator implements Comparator<Living_Entity>
+{
+    @Override
+    public int compare(Living_Entity o1, Living_Entity o2)
+    {
+        int toCountCompare = o1.count - o2.count;
+        return  toCountCompare;
+    }
+}
+class AnimalComparator implements Comparator<Living_Entity>
+{
+    Comparator<Living_Entity> comparator = new AnimalNameComparator().thenComparing(new AnimalCountComparator());
 
-
+    @Override
+    public int compare(Living_Entity o1, Living_Entity o2) {
+        return 0;
+    }
 }
