@@ -6,6 +6,17 @@ import java.util.*;
 
 public class Animal_Behavior // имитация поведения животных, таких как питание, размножение, передвижение и смерть
 {
+    static boolean readyOrNot() // метод для получения случайного выбора да/нет для определения дальнейшей логики поведения животного
+    {
+        int random = new Random().nextInt(2);
+        if (random  == 1)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
    public static void eatAnimalBehavior(List<Living_Entity> list, List<Living_Entity> copylist) // метод, имитирующий процесс питания животных
     {
         for (int i = list.size() - 1; i >= 0; i--)
@@ -139,12 +150,23 @@ public class Animal_Behavior // имитация поведения животн
     }
     }
 
-    public static void removeFromList(List<Living_Entity> list, List<Living_Entity> copyList) // метод удаляет из основного списка животных помеченных на удаление в списке-копии
+    public static void removeFromList(List<Living_Entity> list, List<Living_Entity> copyList) // метод удаляет из основного списка животных, помеченных на удаление в списке-копии
     {
         for (int i = copyList.size()-1; i >= 0; i--)
         {
             if(copyList.get(i) instanceof Living_Entity)
                 if((copyList.get(i)).isDead())
+                {
+                    list.remove(i);
+                }
+        }
+    }
+    public static void relocateFromList(List<Living_Entity> list, List<Living_Entity> copyList) // метод удаляет из основного списка животных, помеченных на перемещение в списке-копии
+    {
+        for (int i = copyList.size()-1; i >= 0; i--)
+        {
+            if(copyList.get(i) instanceof Living_Entity)
+                if((copyList.get(i)).isMove())
                 {
                     list.remove(i);
                 }
@@ -168,7 +190,23 @@ public class Animal_Behavior // имитация поведения животн
             }
         }
     }
+    private static void markedForMoveInCopyList(List<Living_Entity> relocateList, String animalType) // метод отмечает перемещаюеся живое существо флагом для последующего его удаления из текущего списка
+    {
+        List<String> animalsTypes = Factory.get_Animal_Type_Class(); // получаем список классов для сравнения
+        if(animalsTypes.contains(animalType)) // условие сравнения класса животного, переданного в метод
+            for (int i = 0; i < relocateList.size(); i++)
+            {
+                if(relocateList.get(i).getClass().getSimpleName().equals(animalType))  // условие сравнения текущего экземпляра из коллекци с переданным в метод типом животного
+                {
 
+                    if(!(relocateList.get(i).isMove())) // если текущий флаг животного в положении false
+                    {
+                        relocateList.get(i).setMove(true); // устанавливается флаг в true
+                        break;
+                    }
+                }
+            }
+    }
     public static Map<String, Integer> countOfAnimals(List<Living_Entity> list) // метод, подсчитывающий количество животных данного вида в текущей локации, возвращает коллекцию типа Map
     {
         Map<String, Integer> mapOfAnimalsCount = new HashMap<>();
@@ -245,24 +283,62 @@ public class Animal_Behavior // имитация поведения животн
     }
 
     public static void main(String[] args) {
-        List<Living_Entity> list = Factory.listOfAllAnimals(); // создаем лист с животными и травой
 
-        List<Living_Entity> copylist = list;
-        List<Living_Entity> newBorn = new ArrayList<>();
-        Animal_Behavior.multiplayAnimalBehavior(list, newBorn);
-        System.out.println(list);
-        System.out.println(newBorn);
-        list.addAll(newBorn);
-        try {
-            Collections.sort(list, AnimalComparator.class.newInstance());
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+//       List<Living_Entity> list = Factory.listOfAllAnimals(); // создаем лист с животными и травой
+//
+//        List<Living_Entity> copylist = list;
+//        List<Living_Entity> newBorn = new ArrayList<>();
+//        Animal_Behavior.multiplayAnimalBehavior(list, newBorn);
+//        System.out.println(list);
+//        System.out.println(newBorn);
+//        list.addAll(newBorn);
+//
+//
+//            Collections.sort(list, new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
+
+        Location[][] island = Island.createIsland(5, 5); // создаем остров
+
+        for (int i = 0; i < island.length; i++)  // цикл по острову - массиву локаций, содержащих списки животных и растений
+        {
+            for (int j = 0; j < island[i].length; j++) // цикл по острову - массиву локаций, содержащих списки животных и растений
+            {
+                List<Living_Entity> listCurrentLocation = island[i][j].getList(); // на текущей итерации получаем из локации список с животными
+                List<Living_Entity> copyToRelocate = new ArrayList<>(); // список-копия, куда будут заноситься животные, которые перемещаются из текущей локации
+                for (int k = listCurrentLocation.size() - 1; k >=0 ; k--)  // цикл по основному списку животных
+                {
+
+                    if (listCurrentLocation.get(k) instanceof Animals.Herbivorous_Animal || listCurrentLocation.get(k) instanceof Animals.Predatory_Animal) // если текущее животное является хищником или травоядным
+                        if (!(listCurrentLocation.get(k) instanceof Animals.Caterpillar)) // если текущее животное не является гусеницей
+                        {
+                            if (!(listCurrentLocation.get(k).isMove() && readyOrNot())) // если животное решило передвигаться и если оно еще не передвигалось
+                            {
+                                String animalType = listCurrentLocation.get(k).getClass().getSimpleName(); // получаем тип животного
+                                int moveValue = Animal_Info.getMoveRangeValue(animalType); // получаем дальность передвижения животного
+                                Location currentLocation = island[i][j]; // текущая локация для дальнейшей работы метода
+                                List<Location> locationAround = Island.listOfLocationAround(island, currentLocation, moveValue); // получаее список, куда может переместиться выбранное животное
+                                List<Living_Entity> locationToRelocate = Island.chooseOfLocationToRelocate(locationAround, animalType);// выбираем список для перемещения туда выбранного на текущей итерации животного
+                                if(locationToRelocate != null)
+                                {
+                                    listCurrentLocation.get(k).setMove(true); // на текущей итерации животному ставится флаг - передвижение выполнено, чтобы оно не передвигалось при обходе других списков
+                                    locationToRelocate.add(listCurrentLocation.get(k)); // перемещаем текущее животное в выбранный для перемещения список
+                                    copyToRelocate.add(listCurrentLocation.get(k)); // заносим выбранное животное в список на удаление из текущего итерируемого списка
+                                }
+
+                            }
+                        }
+                }
+                relocateFromList(listCurrentLocation, copyToRelocate); // после завершения цикла по выбранному листу из него удаляются животные, отмеченные флагом, как перешедшие
+                Collections.sort(listCurrentLocation,new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
+                System.out.println(listCurrentLocation);
+            }
+
         }
 
 
-        System.out.println(list);
-    }
+
+
+        System.out.println();
+        }
+
 
 }

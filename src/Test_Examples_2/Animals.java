@@ -10,11 +10,33 @@ abstract class Living_Entity // для создания абстрактных �
     abstract boolean isMultiplay();
     abstract boolean isDead();
     abstract void setDead(boolean dead);
+    private boolean isMove;
+
+    abstract boolean isMove();
+
+
+    abstract void setMove(boolean move);
     int count;
+    String name;
+
+    public String getName() {
+        return name;
+    }
 }
 abstract class Animal extends Living_Entity // животные
 {
+    @Override
+    boolean isMove() {
+        return false;
+    }
+
+    @Override
+    void setMove(boolean move) {
+
+    }
+
     int count;
+    String name;
     abstract void eat();
     abstract void hungry();
 
@@ -22,6 +44,12 @@ abstract class Animal extends Living_Entity // животные
     void multiplay(boolean multiplay) {
 
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
 
     @Override
     boolean isMultiplay() {
@@ -40,17 +68,20 @@ abstract class Animal extends Living_Entity // животные
 }
 public class Animals extends Animal// для создания конкретных типов животных
 {
+    String name;
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Animals animals = (Animals) o;
-        return count == animals.count;
+    public String getName() {
+        return name;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(count);
+    boolean isMove() {
+        return false;
+    }
+
+    @Override
+    void setMove(boolean move) {
+
     }
 
     int count;
@@ -85,6 +116,17 @@ public class Animals extends Animal// для создания конкретны
 
     class Plant extends Living_Entity // трава
     {
+        @Override
+        boolean isMove() {
+            return false;
+        }
+
+        @Override
+        void setMove(boolean move) {
+
+        }
+
+        String name;
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -126,13 +168,22 @@ public class Animals extends Animal// для создания конкретны
         int count;
         Plant()
         {
+            name = "Plant";
             this.isDead = false;
             count = Animal_Info.COUNTER_PLANT.incrementAndGet();
         }
 
+        public String getName() {
+            return name;
+        }
     }
     abstract class Predatory_Animal extends Animals // хищные животные
     {
+        String name;
+        @Override
+        public String getName() {
+            return name;
+        }
         int count;
         @Override
         void multiplay(boolean multiplay) {
@@ -163,6 +214,12 @@ public class Animals extends Animal// для создания конкретны
     }
     abstract class Herbivorous_Animal extends Animals // травоядные животные
     {
+
+        String name;
+        @Override
+        public String getName() {
+            return name;
+        }
         int count;
         @Override
         void multiplay(boolean multiplay) {
@@ -217,17 +274,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Wolf extends Predatory_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Wolf wolf = (Wolf) o;
-            return count == wolf.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -290,26 +348,29 @@ public class Animals extends Animal// для создания конкретны
         double current_Saturation;
         double day_down_Saturation = 2;
         public Wolf() {
+            name = "Wolf";
             current_Saturation = max_Saturation;
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             count = Animal_Info.COUNTER_WOLF.incrementAndGet();
         }
         int count;
     }
     class Boa extends Predatory_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Boa boa = (Boa) o;
-            return count == boa.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -370,26 +431,29 @@ public class Animals extends Animal// для создания конкретны
         double current_Saturation;
         double day_down_Saturation = 1;
         public Boa() {
+            name = "Boa";
             current_Saturation = max_Saturation;
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             count = Animal_Info.COUNTER_BOA.incrementAndGet();
         }
         int count;
     }
     class Fox extends Predatory_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Fox fox = (Fox) o;
-            return count == fox.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -450,26 +514,29 @@ public class Animals extends Animal// для создания конкретны
         double current_Saturation;
         double day_down_Saturation = 0.5;
         public Fox() {
+            name = "Fox";
             current_Saturation = max_Saturation;
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             count = Animal_Info.COUNTER_FOX.incrementAndGet();
         }
         int count;
     }
     class Bear extends Predatory_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Bear bear = (Bear) o;
-            return count == bear.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -530,26 +597,29 @@ public class Animals extends Animal// для создания конкретны
         double current_Saturation;
         double day_down_Saturation = 20;
         public Bear() {
+            name = "Bear";
             current_Saturation = max_Saturation;
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             count = Animal_Info.COUNTER_BEAR.incrementAndGet();
         }
         int count;
     }
     class Eagle extends Predatory_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Eagle eagle = (Eagle) o;
-            return count == eagle.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -610,26 +680,29 @@ public class Animals extends Animal// для создания конкретны
         double current_Saturation;
         double day_down_Saturation = 0.2;
         public Eagle() {
+            name = "Eagle";
             current_Saturation = max_Saturation;
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             count = Animal_Info.COUNTER_EAGLE.incrementAndGet();
         }
         int count;
     }
     class Horse extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Horse horse = (Horse) o;
-            return count == horse.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -689,8 +762,10 @@ public class Animals extends Animal// для создания конкретны
         double day_down_Saturation = 15;
         boolean isDead;
         public Horse() {
+            name = "Horse";
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             current_Saturation = max_Saturation;
             count = Animal_Info.COUNTER_HORSE.incrementAndGet();
         }
@@ -698,17 +773,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Deer extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Deer deer = (Deer) o;
-            return count == deer.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -767,8 +843,10 @@ public class Animals extends Animal// для создания конкретны
         double day_down_Saturation = 12.5;
         double max_Saturation = 50;
         public Deer() {
+            name = "Deer";
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             current_Saturation = max_Saturation;
             count = Animal_Info.COUNTER_DEER.incrementAndGet();
         }
@@ -776,17 +854,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Rabbit extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Rabbit rabbit = (Rabbit) o;
-            return count == rabbit.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -845,8 +924,10 @@ public class Animals extends Animal// для создания конкретны
         double max_Saturation = 0.45;
         boolean isDead;
         public Rabbit() {
+            name = "Rabbit";
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             current_Saturation = max_Saturation;
             count = Animal_Info.COUNTER_RABBIT.incrementAndGet();
         }
@@ -854,17 +935,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Mouse extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Mouse goat = (Mouse) o;
-            return count == goat.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -923,8 +1005,10 @@ public class Animals extends Animal// для создания конкретны
         double max_Saturation = 0.01;
         boolean isDead;
         public Mouse() {
+            name = "Mouse";
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             current_Saturation = max_Saturation;
             count = Animal_Info.COUNTER_MOUSE.incrementAndGet();
         }
@@ -933,17 +1017,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Goat extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Goat goat = (Goat) o;
-            return count == goat.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
 
         private boolean multiplay;
@@ -1002,8 +1087,10 @@ public class Animals extends Animal// для создания конкретны
         double max_Saturation = 10;
         boolean isDead;
         public Goat() {
+            name = "Goat";
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             current_Saturation = max_Saturation;
             count = Animal_Info.COUNTER_GOAT.incrementAndGet();
         }
@@ -1012,17 +1099,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Sheep extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Sheep that = (Sheep) o;
-            return count == that.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
         private boolean multiplay;
 
@@ -1080,8 +1168,10 @@ public class Animals extends Animal// для создания конкретны
         double max_Saturation = 15;
         boolean isDead;
         public Sheep() {
+            name = "Sheep";
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             current_Saturation = max_Saturation;
             count = Animal_Info.COUNTER_SHEEP.incrementAndGet();
         }
@@ -1089,17 +1179,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Hog extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Hog that = (Hog) o;
-            return count == that.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
         private boolean multiplay;
 
@@ -1158,8 +1249,10 @@ public class Animals extends Animal// для создания конкретны
         boolean isDead;
 
         public Hog() {
+            name = "Hog";
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             current_Saturation = max_Saturation;
             count = Animal_Info.COUNTER_HOG.incrementAndGet();
         }
@@ -1167,17 +1260,18 @@ public class Animals extends Animal// для создания конкретны
     }
     class Buffalo extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Buffalo that = (Buffalo) o;
-            return count == that.count;
+        String name;
+        public String getName() {
+            return name;
         }
-
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
         private boolean multiplay;
 
@@ -1231,8 +1325,10 @@ public class Animals extends Animal// для создания конкретны
         }
 
         public Buffalo() {
+            name = "Buffalo";
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             current_Saturation = max_Saturation;
               count = Animal_Info.COUNTER_BUFFALO.incrementAndGet();
         }
@@ -1246,17 +1342,19 @@ public class Animals extends Animal// для создания конкретны
     }
     class Duck extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Duck that = (Duck) o;
-            return count == that.count;
+        String name;
+        public String getName() {
+            return name;
         }
 
+        private boolean isMove;
         @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        public boolean isMove() {
+            return isMove;
+        }
+        @Override
+        public void setMove(boolean move) {
+            isMove = move;
         }
         private boolean multiplay;
 
@@ -1315,8 +1413,10 @@ public class Animals extends Animal// для создания конкретны
         int count;
         public Duck()
         {
+            name = "Duck";
             this.isDead = false;
             this.multiplay = false;
+            this.isMove = false;
             current_Saturation = max_Saturation;
             count = Animal_Info.COUNTER_DUCK.incrementAndGet();
         }
@@ -1335,17 +1435,9 @@ public class Animals extends Animal// для создания конкретны
     }
     class Caterpillar extends Herbivorous_Animal
     {
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Caterpillar that = (Caterpillar) o;
-            return count == that.count;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(count);
+        String name;
+        public String getName() {
+            return name;
         }
 
         private boolean multiplay;
@@ -1386,6 +1478,7 @@ public class Animals extends Animal// для создания конкретны
         int count;
         boolean isDead;
         public Caterpillar() {
+            name = "Caterpillar";
             this.isDead = false;
             this.multiplay = false;
             count = Animal_Info.COUNTER_CATERPILLAR.incrementAndGet();
@@ -1400,30 +1493,20 @@ public class Animals extends Animal// для создания конкретны
         }
     }
 }
-class AnimalNameComparator implements Comparator<Living_Entity>
+class AnimalNameComparator implements Comparator<Living_Entity> // класс для сравнения отдельных экземпляров по имени класса
 {
     @Override
     public int compare(Living_Entity o1, Living_Entity o2)
     {
-        int toStringCompare = o1.toString().compareToIgnoreCase(o2.toString());
+        int toStringCompare = o1.getName().compareTo(o2.getName());
         return  toStringCompare;
     }
 }
-class AnimalCountComparator implements Comparator<Living_Entity>
+class AnimalCountComparator implements Comparator<Living_Entity> // класс для сравнения отдельных экземпляров по порядковому номеру животного
 {
     @Override
     public int compare(Living_Entity o1, Living_Entity o2)
     {
-        int toCountCompare = o1.count - o2.count;
-        return  toCountCompare;
-    }
-}
-class AnimalComparator implements Comparator<Living_Entity>
-{
-    Comparator<Living_Entity> comparator = new AnimalNameComparator().thenComparing(new AnimalCountComparator());
-
-    @Override
-    public int compare(Living_Entity o1, Living_Entity o2) {
-        return 0;
+        return  Integer.compare(o1.count, o2.count);
     }
 }

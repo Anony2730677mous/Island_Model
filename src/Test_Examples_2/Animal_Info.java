@@ -3,7 +3,7 @@ package Test_Examples_2;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Animal_Info // содержит информацию о вероятности поедания одного животного другим, общее количество животных одного вида и т.п.
+public class Animal_Info // содержит различную информацию о животных разного вида
     {
         /*
         счетчик общего количества созданных экземпляров класса
