@@ -23,8 +23,8 @@ public class Island // создание острова
         }
         return island;
     }
-public static List<Location> listOfLocationAround(Location[][] island, Location location, int range)// метод, возвращающий список локаций, куда может переместится животное
-{
+    public static List<Location> listOfLocationAround(Location[][] island, Location location, int range)// метод, возвращающий список локаций, куда может переместится животное
+    {
     int currentX = location.getDimensionX(); // получаем координату x текущей локации, переданной в качестве параметра
     int currentY = location.getDimensionY(); // получаем координату y текущей локации, переданной в качестве параметра
     Location around; // временная переменная для занесения в список локаций
@@ -45,9 +45,9 @@ public static List<Location> listOfLocationAround(Location[][] island, Location 
         }
     }
     return listToReturn;
-}
-public static List<Living_Entity> chooseOfLocationToRelocate(List<Location> locationList, String animalType) // метод, возвращающий список, куда переместится животное
-{
+    }
+    public static List<Living_Entity> chooseOfLocationToRelocate(List<Location> locationList, String animalType) // метод, возвращающий список, куда переместится животное
+    {
     Random random = new Random(); // случайный выбор для перемещения животного
     int index = random.nextInt(0, locationList.size()); // получаем индекс списка для выбира, куда переместится животное
     List<Living_Entity> list = locationList.get(index).getList(); // по индексу получаем нужный список
@@ -66,9 +66,9 @@ public static List<Living_Entity> chooseOfLocationToRelocate(List<Location> loca
     }
     else
     return listToRelocate; // метод возвращает список для релокации
+    }
 }
-}
-class Location
+class Location // создание отдельной локации для организации передвижения животных
 {
     Location location;
     int dimensionX;

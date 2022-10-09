@@ -242,6 +242,6 @@ class Test_6
     public static void main(String[] args) {
 
 
-        System.out.println(Animal_Info.getMoveRangeValue("Fox"));
+        System.out.println(Animal_Info.get_probability("Eagle", "Eagle"));
     }
 }
