@@ -12,27 +12,27 @@ public class Factory // создание животных и наполнени�
     private static String herbivorous = "Herbivorous_Animal";
     private static String nothing = "null";
     private static String notSuchClassException = "Такого класса не найдено: ";
-    public static List<Living_Entity> plantAddedList() // метод, создающий список с травой для добавления её в общий список животных каждый новый день
+    public static List<LivingEntity> plantAddedList() // метод, создающий список с травой для добавления её в общий список животных каждый новый день
     {
-        List<Living_Entity> plantAddedList = new ArrayList<>();
-        int plantCount = Factory.animal_Factory_Initial_Count(plant);
+        List<LivingEntity> plantAddedList = new ArrayList<>();
+        int plantCount = Factory.animalFactoryInitialCount(plant);
         for (int i = 0; i < plantCount; i++) {
-            plantAddedList.add(i, Factory.animal_Factory(plant));
+            plantAddedList.add(i, Factory.animalFactory(plant));
         }
         return plantAddedList;
     }
-    public static List<Living_Entity> listOfAllAnimals() // метод, возвращающий общий список, наполненный экземплярами животных и травы
+    public static List<LivingEntity> listOfAllAnimals() // метод, возвращающий общий список, наполненный экземплярами животных и травы
     {
-        List<Living_Entity> listOfAllAnimals = new ArrayList<>();
-        List<String> animalsList = Factory.get_Animal_Type_Class();
+        List<LivingEntity> listOfAllAnimals = new ArrayList<>();
+        List<String> animalsList = Factory.getAnimalTypeClass();
         for (String animal: animalsList)
         {
 
-            int animalСount = Factory.animal_Factory_Initial_Count(animal);
+            int animalСount = Factory.animalFactoryInitialCount(animal);
             for (int i = 0; i < animalСount; i++)
             {
 
-                listOfAllAnimals.add(i, Factory.animal_Factory(animal));
+                listOfAllAnimals.add(i, Factory.animalFactory(animal));
             }
 
         }
@@ -40,7 +40,7 @@ public class Factory // создание животных и наполнени�
         return listOfAllAnimals;
     }
 
-    public static List<String> get_Animal_Type_Class() // метод, создающий и возвращающий лист строковых переменных из названий классов
+    public static List<String> getAnimalTypeClass() // метод, создающий и возвращающий лист строковых переменных из названий классов
     {
 
         List<String> array_string = new ArrayList<>(); // возвращаемый тип значения метода - лист String
@@ -64,9 +64,9 @@ public class Factory // создание животных и наполнени�
         return array_string;
     }
 
-    private static int animal_Factory_Initial_Count(String animalClass) // метод, создающий и возвращающий количество объектов определенного типа для начальной инициализации
+    private static int animalFactoryInitialCount(String animalClass) // метод, создающий и возвращающий количество объектов определенного типа для начальной инициализации
     {
-        int animal_Max_Count = Animal_Info.get_max_Animal_Count(animalClass); // для первоначального наполнения острова вызывается метод, возввращающий максимальное число эивотных данного вида
+        int animal_Max_Count = AnimalInfo.getMaxAnimalCount(animalClass); // для первоначального наполнения острова вызывается метод, возввращающий максимальное число эивотных данного вида
         int animal_count_to_return;
         Random random = new Random();
         animal_count_to_return = random.nextInt(1, animal_Max_Count);
@@ -74,10 +74,10 @@ public class Factory // создание животных и наполнени�
 
     }
 
-    public static  Living_Entity animal_Factory(String animalClass)  // метод, создающий и возвращающий объект определенного типа
+    public static LivingEntity animalFactory(String animalClass)  // метод, создающий и возвращающий объект определенного типа
     {
 
-        Living_Entity animals;
+        LivingEntity animals;
         switch (animalClass)
         {
             case "Boa":

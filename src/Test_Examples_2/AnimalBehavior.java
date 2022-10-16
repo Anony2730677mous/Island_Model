@@ -4,7 +4,7 @@ package Test_Examples_2;
 
 import java.util.*;
 
-public class Animal_Behavior // имитация поведения животных, таких как питание, размножение, передвижение и смерть
+public class AnimalBehavior // имитация поведения животных, таких как питание, размножение, передвижение и смерть
 {
     private static String plant = "Plant";
     private static String caterpillar = "Caterpillar";
@@ -19,10 +19,10 @@ public class Animal_Behavior // имитация поведения животн
             return false;
         }
     }
-    public static void eatAnimalBehavior(List<Living_Entity> list) // метод, имитирующий процесс питания животных
+    public static void eatAnimalBehavior(List<LivingEntity> list) // метод, имитирующий процесс питания животных
     {
-        int plantCount = Animal_Behavior.returnCountOfAnimal(countOfAnimals(list), plant); // начальное количество травы
-        int caterpillarCount = Animal_Behavior.returnCountOfAnimal(countOfAnimals(list), caterpillar); // начальное количество гусениц
+        int plantCount = AnimalBehavior.returnCountOfAnimal(countOfAnimals(list), plant); // начальное количество травы
+        int caterpillarCount = AnimalBehavior.returnCountOfAnimal(countOfAnimals(list), caterpillar); // начальное количество гусениц
 
         /*
             Начинается общий перебор всех элементов списка
@@ -74,17 +74,17 @@ public class Animal_Behavior // имитация поведения животн
             else if((list.get(i) instanceof Animals.Predatory_Animal))
             {
                 String predatorType = list.get(i).getClass().getSimpleName(); // получаем тип животного-хищника
-                List<String> listOfAllAnimalTypes = Factory.get_Animal_Type_Class(); // список всех возможных типов животных в локации
-                List<String> listOfVictims = Animal_Info.getListOfVictims(predatorType); // список всех типов животных, которые ест данный хищник
+                List<String> listOfAllAnimalTypes = Factory.getAnimalTypeClass(); // список всех возможных типов животных в локации
+                List<String> listOfVictims = AnimalInfo.getListOfVictims(predatorType); // список всех типов животных, которые ест данный хищник
 
                 boolean isTrueVictim = true; // условие съедения жертвы хищником
                 while (isTrueVictim) // пока жертва не съедена
                 {
-                    String victim = Animal_Behavior.getVictim(listOfAllAnimalTypes, listOfVictims); // получаем тип животного-жертвы
-                    int countOfAliveVictims = Animal_Behavior.countOfAliveVictims(list, victim); // получаем общее количество потенциальных жертв данного вида животных
+                    String victim = AnimalBehavior.getVictim(listOfAllAnimalTypes, listOfVictims); // получаем тип животного-жертвы
+                    int countOfAliveVictims = AnimalBehavior.countOfAliveVictims(list, victim); // получаем общее количество потенциальных жертв данного вида животных
                     if(countOfAliveVictims > 0) // если количество потенциальных жертв данного типа животных больше 0
                     {
-                        int probability = Animal_Info.get_probability(predatorType, victim); // получаем вероятность, с которой хищник может съесть жертву
+                        int probability = AnimalInfo.getProbability(predatorType, victim); // получаем вероятность, с которой хищник может съесть жертву
                         Random random = new Random(); // вызывается случайное число для имитации охоты хищника на жертву
                         boolean eat = random.nextInt(0, 100) <= probability;// условие вероятность поедания хищником жертвы больше, либо равна выпавшей вероятности
                         if(eat) // то хищник кушает жертву
@@ -115,7 +115,7 @@ public class Animal_Behavior // имитация поведения животн
 
 }
 
-    public static void multiplayAnimalBehavior(List<Living_Entity> list, List<Living_Entity> newBorn) // метод, имитирующий процесс размножения животных
+    public static void multiplayAnimalBehavior(List<LivingEntity> list, List<LivingEntity> newBorn) // метод, имитирующий процесс размножения животных
     {
     for (int i = 0; i < list.size(); i++)
     {
@@ -126,9 +126,9 @@ public class Animal_Behavior // имитация поведения животн
         if(!(list.get(i) instanceof Animals.Plant))
         {
             animalType = list.get(i).getClass().getSimpleName(); // получение типа животного для поиска пары
-            animalMaxCount = Animal_Info.get_max_Animal_Count(animalType); // максимальное число животных данного вида в локации
-            animalCurrentCount = Animal_Behavior.returnCountOfAnimal(Animal_Behavior.countOfAnimals(list), animalType); // текущее число животных данного вида в основном листе
-            animalCurrentCountInNewBornList = Animal_Behavior.returnCountOfAnimal(Animal_Behavior.countOfAnimals(newBorn), animalType); // текущее число животных данного вида в листе новорожденных
+            animalMaxCount = AnimalInfo.getMaxAnimalCount(animalType); // максимальное число животных данного вида в локации
+            animalCurrentCount = AnimalBehavior.returnCountOfAnimal(AnimalBehavior.countOfAnimals(list), animalType); // текущее число животных данного вида в основном листе
+            animalCurrentCountInNewBornList = AnimalBehavior.returnCountOfAnimal(AnimalBehavior.countOfAnimals(newBorn), animalType); // текущее число животных данного вида в листе новорожденных
             if (!(list.get(i).isMultiplay())) // если животное еще не размножалось
                 if (animalCurrentCount > 1) // если у животного есть пара
                 {
@@ -141,11 +141,11 @@ public class Animal_Behavior // имитация поведения животн
                             if ((animalCurrentCount + animalCurrentCountInNewBornList) < animalMaxCount) // условие создания нового экземпляра животного
                             {
                                 Random random = new Random(); // вызывается случайное число для имитации рождения нового животного
-                                int bornProbability = Animal_Info.getProbabilityBornValue(animalType); // получаем вероятность рождения для данного вида животного
+                                int bornProbability = AnimalInfo.getProbabilityBornValue(animalType); // получаем вероятность рождения для данного вида животного
                                 boolean born = random.nextInt(0, 100) <= bornProbability;// условие: вероятность рождения нового животного больше, либо равна выпавшей вероятности
                                 if(born) // то появляется новый экземпляр данного вида
                                 {
-                                    newBorn.add(Factory.animal_Factory(animalType)); // в список новорожденных добавляется новый экземпляр
+                                    newBorn.add(Factory.animalFactory(animalType)); // в список новорожденных добавляется новый экземпляр
                                     animalCurrentCountInNewBornList++; // счетчик новорожденных увеличивается
                                 }
                             }
@@ -156,7 +156,7 @@ public class Animal_Behavior // имитация поведения животн
         }
     }
     }
-    public static  void resetMoveState(List<Living_Entity> listCurrentLocation) // метод для сброса состояния в false у животного, ходившего на предыдущем этапе
+    public static  void resetMoveState(List<LivingEntity> listCurrentLocation) // метод для сброса состояния в false у животного, ходившего на предыдущем этапе
     {
         for (int i = 0; i < listCurrentLocation.size(); i++)
         {
@@ -168,9 +168,9 @@ public class Animal_Behavior // имитация поведения животн
 
         }
     }
-    public static void moveAnimalBehavior(List<Living_Entity> listCurrentLocation, Location[][] island, int dimesionX, int dimensionY) // метод, имитирующий процесс передвижения животных
+    public static void moveAnimalBehavior(List<LivingEntity> listCurrentLocation, Location[][] island, int dimesionX, int dimensionY) // метод, имитирующий процесс передвижения животных
     {
-        List<Living_Entity> copyToRelocate = new ArrayList<>(); // список-копия, куда будут заноситься животные, которые перемещаются из текущей локации
+        List<LivingEntity> copyToRelocate = new ArrayList<>(); // список-копия, куда будут заноситься животные, которые перемещаются из текущей локации
 
         for (int k = listCurrentLocation.size() - 1; k >=0 ; k--)  // цикл по основному списку животных
         {
@@ -183,10 +183,10 @@ public class Animal_Behavior // имитация поведения животн
                     if (!(listCurrentLocation.get(k).isMove()) && (readyOrNot())) // если животное решило передвигаться и если оно еще не передвигалось
                     {
                         String animalType = listCurrentLocation.get(k).getClass().getSimpleName(); // получаем тип животного
-                        int moveValue = Animal_Info.getMoveRangeValue(animalType); // получаем дальность передвижения животного
+                        int moveValue = AnimalInfo.getMoveRangeValue(animalType); // получаем дальность передвижения животного
                         Location currentLocation = island[dimesionX][dimensionY]; // текущая локация для дальнейшей работы метода
                         List<Location> locationAround = Island.listOfLocationAround(island, currentLocation, moveValue); // получаем список, куда может переместиться выбранное животное
-                        List<Living_Entity> locationToRelocate = Island.chooseOfLocationToRelocate(locationAround, animalType);// выбираем список для перемещения туда выбранного на текущей итерации животного
+                        List<LivingEntity> locationToRelocate = Island.chooseOfLocationToRelocate(locationAround, animalType);// выбираем список для перемещения туда выбранного на текущей итерации животного
                         if(locationToRelocate != null)
                         {
                             listCurrentLocation.get(k).setMove(true); // на текущей итерации животному ставится флаг - передвижение выполнено, чтобы оно не передвигалось при обходе других списков
@@ -201,9 +201,9 @@ public class Animal_Behavior // имитация поведения животн
         Collections.sort(listCurrentLocation,new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
     }
 
-    public static void removeFromList(List<Living_Entity> list) // метод, удаляющий из списка элементы, отмеченные как съеденые или умершие
+    public static void removeFromList(List<LivingEntity> list) // метод, удаляющий из списка элементы, отмеченные как съеденые или умершие
     {
-        Iterator<Living_Entity> iteratorList = list.iterator();
+        Iterator<LivingEntity> iteratorList = list.iterator();
 
         while (iteratorList.hasNext())
         {
@@ -213,11 +213,11 @@ public class Animal_Behavior // имитация поведения животн
             }
         }
     }
-    public static void relocateFromList(List<Living_Entity> list, List<Living_Entity> copyList) // метод удаляет из основного списка животных, помеченных на перемещение в списке-копии
+    public static void relocateFromList(List<LivingEntity> list, List<LivingEntity> copyList) // метод удаляет из основного списка животных, помеченных на перемещение в списке-копии
     {
         for (int i = copyList.size()-1; i >= 0; i--)
         {
-            if(copyList.get(i) instanceof Living_Entity)
+            if(copyList.get(i) instanceof LivingEntity)
                 if((copyList.get(i)).isMove())
                 {
                     list.remove(i);
@@ -225,10 +225,10 @@ public class Animal_Behavior // имитация поведения животн
         }
     }
 
-    private static void markedForDeathInCopyList(List<Living_Entity> copyList, String animalType) // метод отмечает съеденное живое существо флагом для последующего его удаления
+    private static void markedForDeathInCopyList(List<LivingEntity> copyList, String animalType) // метод отмечает съеденное живое существо флагом для последующего его удаления
     {
 
-        List<String> animalsTypes = Factory.get_Animal_Type_Class(); // получаем список классов для сравнения
+        List<String> animalsTypes = Factory.getAnimalTypeClass(); // получаем список классов для сравнения
         if(animalsTypes.contains(animalType)) // условие сравнения класса животного, переданного в метод
         for (int i = 0; i < copyList.size(); i++)
         {
@@ -243,9 +243,9 @@ public class Animal_Behavior // имитация поведения животн
             }
         }
     }
-    private static void markedForMoveInCopyList(List<Living_Entity> relocateList, String animalType) // метод отмечает перемещаюеся живое существо флагом для последующего его удаления из текущего списка
+    private static void markedForMoveInCopyList(List<LivingEntity> relocateList, String animalType) // метод отмечает перемещаюеся живое существо флагом для последующего его удаления из текущего списка
     {
-        List<String> animalsTypes = Factory.get_Animal_Type_Class(); // получаем список классов для сравнения
+        List<String> animalsTypes = Factory.getAnimalTypeClass(); // получаем список классов для сравнения
         if(animalsTypes.contains(animalType)) // условие сравнения класса животного, переданного в метод
             for (int i = 0; i < relocateList.size(); i++)
             {
@@ -260,7 +260,7 @@ public class Animal_Behavior // имитация поведения животн
                 }
             }
     }
-    public static Map<String, Integer> countOfAnimals(List<Living_Entity> list) // метод, подсчитывающий количество животных данного вида в текущей локации, возвращает коллекцию типа Map
+    public static Map<String, Integer> countOfAnimals(List<LivingEntity> list) // метод, подсчитывающий количество животных данного вида в текущей локации, возвращает коллекцию типа Map
     {
         Map<String, Integer> mapOfAnimalsCount = new HashMap<>();
 
@@ -301,7 +301,7 @@ public class Animal_Behavior // имитация поведения животн
             return victim = allAnimals.get(index);
     }
 
-    private static int countOfAliveVictims(List<Living_Entity> copyList, String victim) // метод, возвращающий количество несъеденных экземпляров данного типа животного
+    private static int countOfAliveVictims(List<LivingEntity> copyList, String victim) // метод, возвращающий количество несъеденных экземпляров данного типа животного
     {
     int countOfVictims = 0;
     for (int i = 0; i < copyList.size(); i++)
@@ -315,7 +315,7 @@ public class Animal_Behavior // имитация поведения животн
     return countOfVictims;
     }
 
-    public static void hungryDeath(List<Living_Entity> list, List<Living_Entity> copyList) // метод, заносящий в список для удаления то животное, насыщение которого меньше, либо равно 0, как умершее от голода
+    public static void hungryDeath(List<LivingEntity> list, List<LivingEntity> copyList) // метод, заносящий в список для удаления то животное, насыщение которого меньше, либо равно 0, как умершее от голода
     {
         for (int i = 0; i < list.size(); i++)
         {
@@ -355,8 +355,8 @@ public class Animal_Behavior // имитация поведения животн
                 for (int j = 0; j < island[i].length; j++) // цикл по острову - массиву локаций, содержащих списки животных и растений
                 {
 
-                    List<Living_Entity> listCurrentLocation = island[i][j].getList();
-                    Animal_Behavior.resetMoveState(listCurrentLocation);
+                    List<LivingEntity> listCurrentLocation = island[i][j].getList();
+                    AnimalBehavior.resetMoveState(listCurrentLocation);
 
                 }
             }
@@ -368,37 +368,37 @@ public class Animal_Behavior // имитация поведения животн
                 for (int j = 0; j < island[i].length; j++) // цикл по острову - массиву локаций, содержащих списки животных и растений
                 {
 
-                    List<Living_Entity> listCurrentLocation = island[i][j].getList(); // на текущей итерации получаем из локации список с животными
-                    List<Living_Entity> copyList = new ArrayList<>();
-                    List<Living_Entity> newBorn = new ArrayList<>();
-                    List<Living_Entity> plantAdded = new ArrayList<>();
+                    List<LivingEntity> listCurrentLocation = island[i][j].getList(); // на текущей итерации получаем из локации список с животными
+                    List<LivingEntity> copyList = new ArrayList<>();
+                    List<LivingEntity> newBorn = new ArrayList<>();
+                    List<LivingEntity> plantAdded = new ArrayList<>();
                     System.out.println("Список животных в начале дня " + listCurrentLocation);
 
                 /*
                 Проверка на голодную смерть
                  */
                     System.out.println("Проверка на голодную смерть");
-                    Animal_Behavior.hungryDeath(listCurrentLocation, copyList);
-                    Animal_Behavior.removeFromList(listCurrentLocation);
+                    AnimalBehavior.hungryDeath(listCurrentLocation, copyList);
+                    AnimalBehavior.removeFromList(listCurrentLocation);
                     copyList.clear();
                 /*
                 Питание животных
                  */
                     System.out.println("Животные кушают");
-                    Animal_Behavior.eatAnimalBehavior(listCurrentLocation);
+                    AnimalBehavior.eatAnimalBehavior(listCurrentLocation);
 
-                    Animal_Behavior.removeFromList(listCurrentLocation);
+                    AnimalBehavior.removeFromList(listCurrentLocation);
                     copyList.clear();
                 /*
                 Размножение животных
                  */
                     System.out.println("Животные размножаются");
-                    Animal_Behavior.multiplayAnimalBehavior(listCurrentLocation, newBorn);
+                    AnimalBehavior.multiplayAnimalBehavior(listCurrentLocation, newBorn);
                 /*
                 Передвижение животных
                  */
                     System.out.println("Животные передвигаются");
-                    Animal_Behavior.moveAnimalBehavior(listCurrentLocation, island, i, j);
+                    AnimalBehavior.moveAnimalBehavior(listCurrentLocation, island, i, j);
 
                 /*
                 Добавление травы на следующий ход
@@ -406,8 +406,8 @@ public class Animal_Behavior // имитация поведения животн
                     System.out.println("Добавление травы на локацию на следующий ход");
                     plantAdded = Factory.plantAddedList();
                     int addedPlantCount = plantAdded.size();
-                    int plantOnCurrentLocation = Animal_Behavior.countOfAliveVictims(listCurrentLocation, plant);
-                    int maxPlantOnLocation = Animal_Info.get_max_Animal_Count(plant);
+                    int plantOnCurrentLocation = AnimalBehavior.countOfAliveVictims(listCurrentLocation, plant);
+                    int maxPlantOnLocation = AnimalInfo.getMaxAnimalCount(plant);
                     if((addedPlantCount + plantOnCurrentLocation) <= maxPlantOnLocation) // условие добавления на текущую локацию травы
                     {
 
