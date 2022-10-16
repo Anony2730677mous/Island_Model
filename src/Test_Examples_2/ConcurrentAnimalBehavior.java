@@ -1,6 +1,7 @@
 package Test_Examples_2;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,5 +44,14 @@ class PrintList implements Runnable
             throw new RuntimeException(e);
         }
 
+    }
+}
+class MoveReset implements Runnable
+{
+    List<LivingEntity> listCurrentLocation = new CopyOnWriteArrayList<>();
+    @Override
+    public void run()
+    {
+        AnimalBehavior.resetMoveState(listCurrentLocation);
     }
 }

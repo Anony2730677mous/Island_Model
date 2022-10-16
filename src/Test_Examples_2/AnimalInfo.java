@@ -1,6 +1,8 @@
 package Test_Examples_2;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AnimalInfo // содержит различную информацию о животных разного вида
@@ -29,10 +31,10 @@ public class AnimalInfo // содержит различную информац�
         /*
         Коллекции и методы для начальной иницализации и внутриигрового процесса
          */
-        static Map<String, Integer> maxCountInfo = new HashMap<>();// коллекция с максимальными значениями животных в ячейке для каждого вида
-        private Map<String, Map<String, Integer>> probabilityTable = new HashMap<>(); // коллекция с таблицей вероятностей поедания одним животным другого
-        private static Map<String, Integer> probabilityBorn = new HashMap<>(); // коллекция с таблицей вероятностей рождения нового животного
-        private static Map<String, Integer> moveRange = new HashMap<>(); // коллекция с таблицей дальности передвижения животного каждого вида
+        static Map<String, Integer> maxCountInfo = new ConcurrentHashMap<>();// коллекция с максимальными значениями животных в ячейке для каждого вида
+        private Map<String, Map<String, Integer>> probabilityTable = new ConcurrentHashMap<>(); // коллекция с таблицей вероятностей поедания одним животным другого
+        private static Map<String, Integer> probabilityBorn = new ConcurrentHashMap<>(); // коллекция с таблицей вероятностей рождения нового животного
+        private static Map<String, Integer> moveRange = new ConcurrentHashMap<>(); // коллекция с таблицей дальности передвижения животного каждого вида
 
         private static Map<String, Integer> createMoveRangeTable() // метод создает коллекцию, содержащую информацию о дальности передвижения животного каждого вида
         {
@@ -123,7 +125,7 @@ public class AnimalInfo // содержит различную информац�
 
         private Map<String, Map<String, Integer>> createTableOfProbability() // метод создает и возвращает коллекцию с таблицей вероятностей поедания одним животным другого
         {
-            Map<String, Integer> inner_Map_Bear = new HashMap<>();
+            Map<String, Integer> inner_Map_Bear = new ConcurrentHashMap<>();
             inner_Map_Bear.put("Boa", 80);
             inner_Map_Bear.put("Horse", 40);
             inner_Map_Bear.put("Deer", 80);
@@ -136,7 +138,7 @@ public class AnimalInfo // содержит различную информац�
             inner_Map_Bear.put("Duck", 10);
             probabilityTable.put("Bear", inner_Map_Bear);
 
-            Map<String, Integer> inner_Map_Wolf = new HashMap<>();
+            Map<String, Integer> inner_Map_Wolf = new ConcurrentHashMap<>();
             inner_Map_Wolf.put("Horse", 10);
             inner_Map_Wolf.put("Deer", 15);
             inner_Map_Wolf.put("Rabbit", 60);
@@ -148,37 +150,37 @@ public class AnimalInfo // содержит различную информац�
             inner_Map_Wolf.put("Duck", 40);
             probabilityTable.put("Wolf", inner_Map_Wolf);
 
-            Map<String, Integer> inner_Map_Boa = new HashMap<>();
+            Map<String, Integer> inner_Map_Boa = new ConcurrentHashMap<>();
             inner_Map_Boa.put("Fox", 10);
             inner_Map_Boa.put("Rabbit", 60);
             inner_Map_Boa.put("Mouse", 80);
             inner_Map_Boa.put("Duck", 40);
             probabilityTable.put("Boa", inner_Map_Boa);
 
-            Map<String, Integer> inner_Map_Fox = new HashMap<>();
+            Map<String, Integer> inner_Map_Fox = new ConcurrentHashMap<>();
             inner_Map_Fox.put("Caterpillar", 40);
             inner_Map_Fox.put("Rabbit", 70);
             inner_Map_Fox.put("Mouse", 90);
             inner_Map_Fox.put("Duck", 60);
             probabilityTable.put("Fox", inner_Map_Fox);
 
-            Map<String, Integer> inner_Map_Eagle = new HashMap<>();
+            Map<String, Integer> inner_Map_Eagle = new ConcurrentHashMap<>();
             inner_Map_Eagle.put("Fox", 10);
             inner_Map_Eagle.put("Rabbit", 90);
             inner_Map_Eagle.put("Mouse", 90);
             inner_Map_Eagle.put("Duck", 80);
             probabilityTable.put("Eagle", inner_Map_Eagle);
 
-            Map<String, Integer> inner_Map_Mouse = new HashMap<>();
+            Map<String, Integer> inner_Map_Mouse = new ConcurrentHashMap<>();
             inner_Map_Mouse.put("Caterpillar", 90);
             probabilityTable.put("Mouse", inner_Map_Mouse);
 
-            Map<String, Integer> inner_Map_Hog = new HashMap<>();
+            Map<String, Integer> inner_Map_Hog = new ConcurrentHashMap<>();
             inner_Map_Hog.put("Caterpillar", 90);
             inner_Map_Hog.put("Mouse", 50);
             probabilityTable.put("Hog", inner_Map_Hog);
 
-            Map<String, Integer> inner_Map_Duck = new HashMap<>();
+            Map<String, Integer> inner_Map_Duck = new ConcurrentHashMap<>();
             inner_Map_Duck.put("Caterpillar", 90);
             probabilityTable.put("Duck", inner_Map_Duck);
 
@@ -188,15 +190,15 @@ public class AnimalInfo // содержит различную информац�
 
         public static int getMaxAnimalCount(String typeOfAnimal) // метод возвращает максимальное количество животных для данного вида
         {
-        int max_count = 0;
+        int maxCount = 0;
         for(String s: createMaxCountTable().keySet())
         {
             if(s.equals(typeOfAnimal))
             {
-                max_count = maxCountInfo.get(s);
+                maxCount = maxCountInfo.get(s);
             }
         }
-        return max_count;
+        return maxCount;
         }
 
         public static int getProbability(String predator, String victim) // на основе таблицы вероятности поедания одним животным другого метод возвращает вероятность для конкретного типа животного
@@ -208,12 +210,12 @@ public class AnimalInfo // содержит различную информац�
         {
             if(s.equals(predator)) // если животное - хищник найдено
             {
-                Map<String, Integer> type_of_Animal = map.get(s); // получаем таблицу вероятностей для этого типа хищника
-                for(String s1: type_of_Animal.keySet()) // в таблице ищем вероятность для животного - жертвы
+                Map<String, Integer> typeOfAnimal = map.get(s); // получаем таблицу вероятностей для этого типа хищника
+                for(String s1: typeOfAnimal.keySet()) // в таблице ищем вероятность для животного - жертвы
                 {
                     if(s1.equals(victim)) // если животное - жертва найдено
                     {
-                        probability = type_of_Animal.get(s1); // получаем вероятность съедения жертвы хищником
+                        probability = typeOfAnimal.get(s1); // получаем вероятность съедения жертвы хищником
                     }
                 }
             }
@@ -223,7 +225,7 @@ public class AnimalInfo // содержит различную информац�
 
         public static List<String> getListOfVictims(String predator) // метод возвращает список животных-жертв для определенного хищника
         {
-            List<String> listOfVictims = new ArrayList<>(); // список, куда заносятся животные-жертвы
+            List<String> listOfVictims = new CopyOnWriteArrayList<>(); // список, куда заносятся животные-жертвы
             Map<String, Map<String, Integer>> map = new AnimalInfo().createTableOfProbability(); // вызываем метод create_Table_of_probability для получения таблицы вероятностей поедания
 
             for(String s: map.keySet()) // в цикле по ключам таблицы ищем животное - хищник

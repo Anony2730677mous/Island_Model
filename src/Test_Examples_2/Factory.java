@@ -3,6 +3,7 @@ package Test_Examples_2;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Factory // создание животных и наполнение списка созданными экземплярами животных каждого вида в случайном количестве
 {
@@ -14,7 +15,7 @@ public class Factory // создание животных и наполнени�
     private static String notSuchClassException = "Такого класса не найдено: ";
     public static List<LivingEntity> plantAddedList() // метод, создающий список с травой для добавления её в общий список животных каждый новый день
     {
-        List<LivingEntity> plantAddedList = new ArrayList<>();
+        List<LivingEntity> plantAddedList = new CopyOnWriteArrayList<>();
         int plantCount = Factory.animalFactoryInitialCount(plant);
         for (int i = 0; i < plantCount; i++) {
             plantAddedList.add(i, Factory.animalFactory(plant));
@@ -23,7 +24,7 @@ public class Factory // создание животных и наполнени�
     }
     public static List<LivingEntity> listOfAllAnimals() // метод, возвращающий общий список, наполненный экземплярами животных и травы
     {
-        List<LivingEntity> listOfAllAnimals = new ArrayList<>();
+        List<LivingEntity> listOfAllAnimals = new CopyOnWriteArrayList<>();
         List<String> animalsList = Factory.getAnimalTypeClass();
         for (String animal: animalsList)
         {
@@ -43,7 +44,7 @@ public class Factory // создание животных и наполнени�
     public static List<String> getAnimalTypeClass() // метод, создающий и возвращающий лист строковых переменных из названий классов
     {
 
-        List<String> array_string = new ArrayList<>(); // возвращаемый тип значения метода - лист String
+        List<String> array_string = new CopyOnWriteArrayList<>(); // возвращаемый тип значения метода - лист String
         try {
             Class[] array_of_Animal_Class = Class.forName(packageName).getDeclaredClasses(); //с помощью рефлексии собираем все классы класса Animal_Example в массив классов
 

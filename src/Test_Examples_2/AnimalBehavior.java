@@ -3,6 +3,9 @@ package Test_Examples_2;
 
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AnimalBehavior // имитация поведения животных, таких как питание, размножение, передвижение и смерть
 {
@@ -170,7 +173,7 @@ public class AnimalBehavior // имитация поведения животн�
     }
     public static void moveAnimalBehavior(List<LivingEntity> listCurrentLocation, Location[][] island, int dimesionX, int dimensionY) // метод, имитирующий процесс передвижения животных
     {
-        List<LivingEntity> copyToRelocate = new ArrayList<>(); // список-копия, куда будут заноситься животные, которые перемещаются из текущей локации
+        List<LivingEntity> copyToRelocate = new CopyOnWriteArrayList<>(); // список-копия, куда будут заноситься животные, которые перемещаются из текущей локации
 
         for (int k = listCurrentLocation.size() - 1; k >=0 ; k--)  // цикл по основному списку животных
         {
@@ -262,7 +265,7 @@ public class AnimalBehavior // имитация поведения животн�
     }
     public static Map<String, Integer> countOfAnimals(List<LivingEntity> list) // метод, подсчитывающий количество животных данного вида в текущей локации, возвращает коллекцию типа Map
     {
-        Map<String, Integer> mapOfAnimalsCount = new HashMap<>();
+        Map<String, Integer> mapOfAnimalsCount = new ConcurrentHashMap<>();
 
         String animalType;
         for (int i = 0; i < list.size(); i++)

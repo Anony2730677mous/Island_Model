@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Main_Frame // запуск основной программы
 {
-    public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
+    public static void main(String[] args)  {
         /*
         Начальная фаза: запрос параметров острова и инициализация острова, вывод статистики по созданному острову.
          */

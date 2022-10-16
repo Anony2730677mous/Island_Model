@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class Island // создание острова
@@ -28,7 +29,7 @@ public class Island // создание острова
     int currentX = location.getDimensionX(); // получаем координату x текущей локации, переданной в качестве параметра
     int currentY = location.getDimensionY(); // получаем координату y текущей локации, переданной в качестве параметра
     Location around; // временная переменная для занесения в список локаций
-    ArrayList<Location> listToReturn = new ArrayList<>(); // создаем список локаций, окружающих текущую локацию
+    List<Location> listToReturn = new CopyOnWriteArrayList<>(); // создаем список локаций, окружающих текущую локацию
     for (int i = currentX - range; i <= currentX + range; i++) // цикл по координатам х с учетом максимального расстояния передвижения животного
     {
         for (int j = currentY - range; j <= currentY + range ; j++) // цикл по координатам y с учетом максимального расстояния передвижения животного
