@@ -4,14 +4,13 @@ package Test_Examples_2;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AnimalBehavior // имитация поведения животных, таких как питание, размножение, передвижение и смерть
 {
     private static String plant = "Plant";
     private static String caterpillar = "Caterpillar";
-    private static boolean readyOrNot() // метод для получения случайного выбора да/нет для определения дальнейшей логики поведения животного
+    private static synchronized boolean readyOrNot() // метод для получения случайного выбора да/нет для определения дальнейшей логики поведения животного
     {
         int random = new Random().nextInt(2);
         if (random  == 1)
@@ -159,7 +158,7 @@ public class AnimalBehavior // имитация поведения животн�
         }
     }
     }
-    public static  void resetMoveState(List<LivingEntity> listCurrentLocation) // метод для сброса состояния в false у животного, ходившего на предыдущем этапе
+    public static synchronized void resetMoveState(List<LivingEntity> listCurrentLocation) // метод для сброса состояния в false у животного, ходившего на предыдущем этапе
     {
         for (int i = 0; i < listCurrentLocation.size(); i++)
         {
@@ -171,7 +170,7 @@ public class AnimalBehavior // имитация поведения животн�
 
         }
     }
-    public static void moveAnimalBehavior(List<LivingEntity> listCurrentLocation, Location[][] island, int dimesionX, int dimensionY) // метод, имитирующий процесс передвижения животных
+    public static synchronized void moveAnimalBehavior(List<LivingEntity> listCurrentLocation, Location[][] island, int dimesionX, int dimensionY) // метод, имитирующий процесс передвижения животных
     {
         List<LivingEntity> copyToRelocate = new CopyOnWriteArrayList<>(); // список-копия, куда будут заноситься животные, которые перемещаются из текущей локации
 
@@ -204,15 +203,25 @@ public class AnimalBehavior // имитация поведения животн�
         Collections.sort(listCurrentLocation,new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
     }
 
-    public static void removeFromList(List<LivingEntity> list) // метод, удаляющий из списка элементы, отмеченные как съеденые или умершие
+//    public static synchronized void removeFromList(List<LivingEntity> list) // метод, удаляющий из списка элементы, отмеченные как съеденые или умершие
+//    {
+//        Iterator<LivingEntity> iteratorList = list.iterator();
+//
+//        while (iteratorList.hasNext())
+//        {
+//            if(iteratorList.next().isDead())
+//            {
+//                iteratorList.remove();
+//            }
+//        }
+//    }
+    public static synchronized void removeFromList(List<LivingEntity> list)
     {
-        Iterator<LivingEntity> iteratorList = list.iterator();
-
-        while (iteratorList.hasNext())
+        for (int i = list.size() -1; i >=0 ; i--)
         {
-            if(iteratorList.next().isDead())
+            if(list.get(i).isDead())
             {
-                iteratorList.remove();
+                list.remove(i);
             }
         }
     }
@@ -304,7 +313,7 @@ public class AnimalBehavior // имитация поведения животн�
             return victim = allAnimals.get(index);
     }
 
-    private static int countOfAliveVictims(List<LivingEntity> copyList, String victim) // метод, возвращающий количество несъеденных экземпляров данного типа животного
+    public static int countOfAliveVictims(List<LivingEntity> copyList, String victim) // метод, возвращающий количество несъеденных экземпляров данного типа животного
     {
     int countOfVictims = 0;
     for (int i = 0; i < copyList.size(); i++)
