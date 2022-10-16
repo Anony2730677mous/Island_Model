@@ -6,7 +6,21 @@ import java.util.Random;
 
 public class Factory // создание животных и наполнение списка созданными экземплярами животных каждого вида в случайном количестве
 {
-
+    private static String plant = "Plant";
+    private static String packageName = "Test_Examples_2.Animals";
+    private static String predators = "Predatory_Animal";
+    private static String herbivorous = "Herbivorous_Animal";
+    private static String nothing = "null";
+    private static String notSuchClassException = "Такого класса не найдено: ";
+    public static List<Living_Entity> plantAddedList() // метод, создающий список с травой для добавления её в общий список животных каждый новый день
+    {
+        List<Living_Entity> plantAddedList = new ArrayList<>();
+        int plantCount = Factory.animal_Factory_Initial_Count(plant);
+        for (int i = 0; i < plantCount; i++) {
+            plantAddedList.add(i, Factory.animal_Factory(plant));
+        }
+        return plantAddedList;
+    }
     public static List<Living_Entity> listOfAllAnimals() // метод, возвращающий общий список, наполненный экземплярами животных и травы
     {
         List<Living_Entity> listOfAllAnimals = new ArrayList<>();
@@ -14,8 +28,8 @@ public class Factory // создание животных и наполнени�
         for (String animal: animalsList)
         {
 
-            int animal_count = Factory.animal_Factory_Initial_Count(animal);
-            for (int i = 0; i < animal_count; i++)
+            int animalСount = Factory.animal_Factory_Initial_Count(animal);
+            for (int i = 0; i < animalСount; i++)
             {
 
                 listOfAllAnimals.add(i, Factory.animal_Factory(animal));
@@ -31,12 +45,12 @@ public class Factory // создание животных и наполнени�
 
         List<String> array_string = new ArrayList<>(); // возвращаемый тип значения метода - лист String
         try {
-            Class[] array_of_Animal_Class = Class.forName("Test_Examples_2.Animals").getDeclaredClasses(); //с помощью рефлексии собираем все классы класса Animal_Example в массив классов
+            Class[] array_of_Animal_Class = Class.forName(packageName).getDeclaredClasses(); //с помощью рефлексии собираем все классы класса Animal_Example в массив классов
 
             for (int i = 0; i < array_of_Animal_Class.length; i++) {
-                if(!(array_of_Animal_Class[i].getSimpleName().equals("Predatory_Animal")))
-                if(!(array_of_Animal_Class[i].getSimpleName().equals("Herbivorous_Animal")))
-                if(!(array_of_Animal_Class[i].getSimpleName().equals("null")))
+                if(!(array_of_Animal_Class[i].getSimpleName().equals(predators)))
+                if(!(array_of_Animal_Class[i].getSimpleName().equals(herbivorous)))
+                if(!(array_of_Animal_Class[i].getSimpleName().equals(nothing)))
                 {
 
                     array_string.add( array_of_Animal_Class[i].getSimpleName()); // преобразуем название класса в строковую переменную и заносим ее в лист строк
@@ -45,7 +59,7 @@ public class Factory // создание животных и наполнени�
             }
         } catch (ClassNotFoundException e)
         {
-            System.out.println("Такого класса не найдено в " + e.getMessage());
+            System.out.println(notSuchClassException + e.getCause());
         }
         return array_string;
     }
@@ -117,7 +131,7 @@ public class Factory // создание животных и наполнени�
                 animals = plant;
                 break;
             default:
-                throw new IllegalStateException("Такого класса нет: " + animalClass);
+                throw new IllegalStateException(notSuchClassException + animalClass);
         }
 return animals;
     }
