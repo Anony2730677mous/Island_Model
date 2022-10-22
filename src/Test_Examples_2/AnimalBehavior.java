@@ -117,7 +117,7 @@ public class AnimalBehavior // имитация поведения животн�
 
 }
 
-    public static void multiplayAnimalBehavior(List<LivingEntity> list, List<LivingEntity> newBorn) // метод, имитирующий процесс размножения животных
+    public static void multiPlayAnimalBehavior(List<LivingEntity> list, List<LivingEntity> newBorn) // метод, имитирующий процесс размножения животных
     {
     for (int i = 0; i < list.size(); i++)
     {
@@ -157,6 +157,18 @@ public class AnimalBehavior // имитация поведения животн�
                 }
         }
     }
+    }
+    public static synchronized void resetMultiPlayState(List<LivingEntity> listCurrentLocation) // метод для сброса состояния в false у животного, размножавшегося на предыдущем этапе
+    {
+        for (int i = 0; i < listCurrentLocation.size(); i++)
+        {
+            if (listCurrentLocation.get(i) instanceof Animals.Herbivorous_Animal || listCurrentLocation.get(i) instanceof Animals.Predatory_Animal) // если текущее животное является хищником или травоядным
+                if (!(listCurrentLocation.get(i) instanceof Animals.Caterpillar)) // если текущее животное не является гусеницей
+                {
+                    listCurrentLocation.get(i).multiplay(false); // в начале каждого дня животное не размножалось
+                }
+
+        }
     }
     public static synchronized void resetMoveState(List<LivingEntity> listCurrentLocation) // метод для сброса состояния в false у животного, ходившего на предыдущем этапе
     {
@@ -405,7 +417,7 @@ public class AnimalBehavior // имитация поведения животн�
                 Размножение животных
                  */
                     System.out.println("Животные размножаются");
-                    AnimalBehavior.multiplayAnimalBehavior(listCurrentLocation, newBorn);
+                    AnimalBehavior.multiPlayAnimalBehavior(listCurrentLocation, newBorn);
                 /*
                 Передвижение животных
                  */
