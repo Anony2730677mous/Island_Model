@@ -10,8 +10,6 @@ abstract class LivingEntity // для создания абстрактных т
     abstract boolean isMultiplay();
     abstract boolean isDead();
     abstract void setDead(boolean dead);
-    private boolean isMove;
-
     abstract boolean isMove();
 
 
@@ -35,7 +33,6 @@ abstract class Animal extends LivingEntity // животные
 
     }
 
-    int count;
     String name;
     abstract void eat();
     abstract void hungry();
@@ -84,7 +81,6 @@ public class Animals extends Animal// для создания конкретны
 
     }
 
-    int count;
     @Override
     void multiplay(boolean multiplay) {
 

@@ -3,56 +3,57 @@ package Test_Examples_2;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ConcurrentAnimalBehavior
 {
+
     public volatile boolean firstLock = true;
     public volatile boolean secondLock = true;
     List<LivingEntity> listCurrentLocation;
-    Lock lock = new ReentrantLock();
-    Location[][] island;
+    final Lock lock = new ReentrantLock();
+    int x = 3;
+    int y = 3;
+    Location[][] island = Island.createIsland(x, y);
     final int day = 5;
     CountDownLatch count = new CountDownLatch(day);
+    ExecutorService executorService3 = Executors.newFixedThreadPool(x * y);
 
-    int i;
-    int j;
+
     static String plant = "Plant";
     static String caterpillar = "Caterpillar";
+
     public void allMethods()
     {
+        ExecutorService executorServiceStateReset;
         for (int k = 0; k < day; k++)
         {
             resetAnimalState();
             animalConcurrentBehavior();
             printStatistics();
-            System.out.println("на острове закончился " + (k+ 1) + " день");
+            System.out.println("на острове закончился " + (k + 1) + " день");
             count.countDown();
+
         }
     }
+
     public void resetAnimalState()
     {
         synchronized (lock)
         {
-            try
-            {
+            try {
                 while (!firstLock && !secondLock)
-                    {
-                        lock.wait();
-                    }
+                {
+                    lock.wait();
+                }
                 System.out.println("Метод resetAnimalState");
 
-                    firstLock = false;
-                    lock.notifyAll();
+                firstLock = false;
+                lock.notifyAll();
 
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 System.out.println(e.getCause());
             }
         }
@@ -62,14 +63,13 @@ public class ConcurrentAnimalBehavior
         synchronized (lock) {
             try {
 
-                    while (firstLock)
-                    {
-                        lock.wait();
-                    }
+                while (firstLock) {
+                    lock.wait();
+                }
                 System.out.println("Метод animalConcurrentBehavior");
 
-                    secondLock = false;
-                    lock.notifyAll();
+                secondLock = false;
+                lock.notifyAll();
 
             } catch (InterruptedException e) {
                 System.out.println(e.getCause());
@@ -77,14 +77,19 @@ public class ConcurrentAnimalBehavior
         }
     }
 
-    public void printStatistics() {
-        synchronized (lock) {
+    public void printStatistics()
+    {
+        synchronized (lock)
+        {
             try {
-                    while (secondLock)
-                    {
-                        lock.wait();
-                    }
+                while (secondLock)
+                {
+                    lock.wait();
+                }
                 System.out.println("Метод printStatistics");
+
+                     AnimalStatistics as = new AnimalStatistics(island, lock);
+                     as.runStats();
 
                 firstLock = true;
                 secondLock = true;
@@ -94,20 +99,31 @@ public class ConcurrentAnimalBehavior
             }
         }
     }
+
     public static void main(String[] args) {
 
-        int x = 3;
-        int y = 3;
-        int d = 5;
-        Location[][] island = Island.createIsland(x, y);
+//        int x = 3;
+//        int y = 3;
+//        int d = 5;
+//
+//        Location[][] island = Island.createIsland(x, y);
+
 
         ConcurrentAnimalBehavior cab = new ConcurrentAnimalBehavior();
-        ExecutorService executorService1 = Executors.newFixedThreadPool(x * y);
-        ExecutorService executorService2 = Executors.newFixedThreadPool(x * y);
-        ExecutorService executorService3 = Executors.newFixedThreadPool(1);
+//        cab.firstLock = true;
+//        cab.secondLock = true;
+//        cab.lock = new ReentrantLock();
+//        cab.count = count1;
+//        ExecutorService executorService1 = Executors.newFixedThreadPool(x * y);
+//        ExecutorService executorService2 = Executors.newFixedThreadPool(x * y);
+//        ExecutorService executorService3 = Executors.newFixedThreadPool(1);
 
 
         cab.allMethods();
+
+
+
+
 
         System.out.println("Работа цикла закончена");
 
@@ -297,19 +313,21 @@ public class ConcurrentAnimalBehavior
 
     }
 
-    class AnimalStatistics implements Runnable {
+    static class AnimalStatistics
+    {
         List<LivingEntity> listCurrentLocation;
         Location[][] island;
         private Lock lock;
 
-        public AnimalStatistics(Location[][] island, Lock lock) {
+        public AnimalStatistics(Location[][] island, Lock lock)
+        {
 
             this.island = island;
             this.lock = lock;
         }
 
-        @Override
-        public void run()
+
+        public void runStats()
         {
             try {
 
@@ -322,7 +340,7 @@ public class ConcurrentAnimalBehavior
                 for (int i = 0; i < island.length; i++) {
                     for (int j = 0; j < island[i].length; j++) {
                         listCurrentLocation = island[i][j].getList();
-                        int result = 0;
+                        int result;
                         int predators = 0;
                         int herbivore = 0;
                         int plant = 0;
