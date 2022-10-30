@@ -238,4 +238,6 @@ public class AnimalInfo // содержит различную информац�
             return listOfVictims;
         }
 
+
+
 }
