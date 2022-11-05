@@ -10,33 +10,21 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConcurrentAnimalBehavior
 {
 
-    public volatile boolean firstLock = true;
-    public volatile boolean secondLock = true;
-    List<LivingEntity> listCurrentLocation;
-    final Lock lock = new ReentrantLock();
-    int x = 3;
-    int y = 3;
-    Location[][] island = Island.createIsland(x, y);
-    final int day = 5;
-    CountDownLatch count = new CountDownLatch(day);
-    ExecutorService executorService3 = Executors.newFixedThreadPool(x * y);
+    public volatile boolean firstLock;
+    public volatile boolean secondLock;
 
+    Lock lock;
 
+    CountDownLatch count;
     static String plant = "Plant";
     static String caterpillar = "Caterpillar";
 
     public void allMethods()
     {
-        ExecutorService executorServiceStateReset;
-        for (int k = 0; k < day; k++)
-        {
-            resetAnimalState();
-            animalConcurrentBehavior();
-            printStatistics();
-            System.out.println("на острове закончился " + (k + 1) + " день");
-            count.countDown();
-
-        }
+        resetAnimalState();
+        animalConcurrentBehavior();
+        printStatistics();
+        count.countDown();
     }
 
     public void resetAnimalState()
@@ -88,9 +76,6 @@ public class ConcurrentAnimalBehavior
                 }
                 System.out.println("Метод printStatistics");
 
-                     AnimalStatistics as = new AnimalStatistics(island, lock);
-                     as.runStats();
-
                 firstLock = true;
                 secondLock = true;
                 lock.notifyAll();
@@ -100,36 +85,7 @@ public class ConcurrentAnimalBehavior
         }
     }
 
-    public static void main(String[] args) {
 
-//        int x = 3;
-//        int y = 3;
-//        int d = 5;
-//
-//        Location[][] island = Island.createIsland(x, y);
-
-
-        ConcurrentAnimalBehavior cab = new ConcurrentAnimalBehavior();
-//        cab.firstLock = true;
-//        cab.secondLock = true;
-//        cab.lock = new ReentrantLock();
-//        cab.count = count1;
-//        ExecutorService executorService1 = Executors.newFixedThreadPool(x * y);
-//        ExecutorService executorService2 = Executors.newFixedThreadPool(x * y);
-//        ExecutorService executorService3 = Executors.newFixedThreadPool(1);
-
-
-        cab.allMethods();
-
-
-
-
-
-        System.out.println("Работа цикла закончена");
-
-
-
-    }
 
     class StateReset implements Runnable
     {
@@ -137,41 +93,10 @@ public class ConcurrentAnimalBehavior
 
         int x;
         int y;
-        ExecutorService executorServiceStateReset;
-        Lock lock;
-
-        public StateReset(Location[][] island, int x, int y, ExecutorService executorServiceStateReset, Lock lock)
-        {
-            this.island = island;
-            this.x = x;
-            this.y = y;
-            this.executorServiceStateReset = executorServiceStateReset;
-            this.lock = lock;
-        }
 
         @Override
-        public void run()
-        {
-            try {
-                lock.lock();
-                for (int j = 0; j < x; j++)
-                {
-                    for (int k = 0; k < y; k++)
-                    {
-                        List<LivingEntity> list = island[j][k].getList();
-                        executorServiceStateReset.execute(new AnimalStateReset(list));
-
-                    }
-
-                }
-                executorServiceStateReset.shutdown();
-            } catch (Exception e) {
-                System.out.println(e.getCause());
-            } finally {
-                lock.unlock();
-            }
-
-
+        public void run() {
+            System.out.println("StateReset");
         }
     }
 
@@ -180,58 +105,29 @@ public class ConcurrentAnimalBehavior
 
         int x;
         int y;
-        ExecutorService executorServiceAnimalLife;
-        Lock lock;
-
-        public AnimalLife(Location[][] island, int x, int y, ExecutorService executorServiceAnimalLife, Lock lock) {
-            this.island = island;
-            this.x = x;
-            this.y = y;
-            this.executorServiceAnimalLife = executorServiceAnimalLife;
-            this.lock = lock;
-        }
 
         @Override
         public void run() {
-            try {
-
-                lock.lock();
-                for (int j = 0; j < x; j++) {
-                    for (int k = 0; k < y; k++) {
-                        List<LivingEntity> list = island[j][k].getList();
-                        executorServiceAnimalLife.execute(new AnimalConcurrentBehavior(list, island, j, k));
-
-
-                    }
-
-                }
-                executorServiceAnimalLife.shutdown();
-            } catch (Exception e) {
-                System.out.println(e.getCause());
-            } finally {
-                lock.unlock();
-            }
-
-
+            System.out.println("AnimalLife");
         }
     }
 
     class AnimalStateReset implements Runnable {
         List<LivingEntity> listCurrentLocation;
-
-
-        public AnimalStateReset(List<LivingEntity> listCurrentLocation) {
-            this.listCurrentLocation = listCurrentLocation;
-
-        }
-
+        Location[][] island;
         @Override
-        public void run() {
-
-            AnimalBehavior.resetMultiPlayState(listCurrentLocation);
-            AnimalBehavior.resetMoveState(listCurrentLocation);
-
-
+        public void run()
+        {
+            System.out.println("AnimalStateReset");
+            for (int i = 0; i < island.length; i++)
+            {
+                for (int j = 0; j < island[i].length; j++)
+                {
+                    listCurrentLocation = island[i][j].getList();
+                    AnimalBehavior.resetMultiPlayState(listCurrentLocation);
+                    AnimalBehavior.resetMoveState(listCurrentLocation);
+                }
+            }
         }
     }
 
@@ -258,7 +154,6 @@ public class ConcurrentAnimalBehavior
 
             List<LivingEntity> copyList = new CopyOnWriteArrayList<>();
             List<LivingEntity> newBorn = new CopyOnWriteArrayList<>();
-            List<LivingEntity> plantAdded;
             //System.out.println("Список животных в начале дня " + listCurrentLocation);
 
                 /*
@@ -292,19 +187,7 @@ public class ConcurrentAnimalBehavior
                 Добавление травы на следующий ход
                  */
             System.out.println("Добавление травы на локацию на следующий ход");
-            plantAdded = Factory.plantAddedList();
-            int addedPlantCount = plantAdded.size();
-            int plantOnCurrentLocation = AnimalBehavior.countOfAliveVictims(listCurrentLocation, plant);
-            int maxPlantOnLocation = AnimalInfo.getMaxAnimalCount(plant);
-            if ((addedPlantCount + plantOnCurrentLocation) <= maxPlantOnLocation) // условие добавления на текущую локацию травы
-            {
-
-                listCurrentLocation.addAll(plantAdded);
-            } else {
-                for (int k = 0; k < (maxPlantOnLocation - plantOnCurrentLocation); k++) {
-                    listCurrentLocation.add(plantAdded.get(k));
-                }
-            }
+            AnimalBehavior.setPlant(listCurrentLocation);
             Collections.sort(listCurrentLocation, new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
             //System.out.println("Список животных в конце дня " + listCurrentLocation);
             System.out.println("Локация с координатами x= " + i + " и y= " + j + " обработана");
@@ -372,4 +255,26 @@ public class ConcurrentAnimalBehavior
     }
 
 
+}
+class TestCAB
+{
+    public static void main(String[] args)
+    {
+        int x = 3;
+        int y = 3;
+        int time = 4;
+        Location[][] island = Island.createIsland(x, y);
+
+        ConcurrentAnimalBehavior cab = new ConcurrentAnimalBehavior();
+        cab.count = new CountDownLatch(time);
+        cab.firstLock = true;
+        cab.secondLock = true;
+        cab.lock = new ReentrantLock();
+        for (int i = 0; i < time; i++)
+        {
+
+            cab.allMethods();
+        }
+
+    }
 }

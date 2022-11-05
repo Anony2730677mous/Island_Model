@@ -359,6 +359,26 @@ public class AnimalBehavior // имитация поведения животн�
         }
     }
 
+    public static void setPlant(List<LivingEntity> listCurrentLocation) // метод добавляет траву в текущую локацию
+    {
+        System.out.println("Добавление травы на локацию на следующий ход");
+        List<LivingEntity> plantAdded = Factory.plantAddedList();
+        int addedPlantCount = plantAdded.size();
+        int plantOnCurrentLocation = AnimalBehavior.countOfAliveVictims(listCurrentLocation, plant);
+        int maxPlantOnLocation = AnimalInfo.getMaxAnimalCount(plant);
+        if((addedPlantCount + plantOnCurrentLocation) <= maxPlantOnLocation) // условие добавления на текущую локацию травы
+        {
+
+            listCurrentLocation.addAll(plantAdded);
+        }
+        else {
+            for (int k = 0; k < (maxPlantOnLocation - plantOnCurrentLocation); k++)
+            {
+                listCurrentLocation.add(plantAdded.get(k));
+            }
+        }
+    }
+
     public static void main(String[] args) {
 
 
@@ -370,7 +390,7 @@ public class AnimalBehavior // имитация поведения животн�
             System.out.println("Начался " + d + " день жизни на острове");
             System.out.println();
             /*
-            Цикл по всем локациям для сброса флага передвижений в начале каждого дня
+            Цикл по всем локациям для сброса флага передвижений и размножений в начале каждого дня
              */
 
             System.out.println("сброс флага передвижений начался");
@@ -381,6 +401,7 @@ public class AnimalBehavior // имитация поведения животн�
 
                     List<LivingEntity> listCurrentLocation = island[i][j].getList();
                     AnimalBehavior.resetMoveState(listCurrentLocation);
+                    AnimalBehavior.resetMultiPlayState(listCurrentLocation);
 
                 }
             }
@@ -395,7 +416,7 @@ public class AnimalBehavior // имитация поведения животн�
                     List<LivingEntity> listCurrentLocation = island[i][j].getList(); // на текущей итерации получаем из локации список с животными
                     List<LivingEntity> copyList = new ArrayList<>();
                     List<LivingEntity> newBorn = new ArrayList<>();
-                    List<LivingEntity> plantAdded = new ArrayList<>();
+
                     System.out.println("Список животных в начале дня " + listCurrentLocation);
 
                 /*
@@ -427,22 +448,8 @@ public class AnimalBehavior // имитация поведения животн�
                 /*
                 Добавление травы на следующий ход
                  */
-                    System.out.println("Добавление травы на локацию на следующий ход");
-                    plantAdded = Factory.plantAddedList();
-                    int addedPlantCount = plantAdded.size();
-                    int plantOnCurrentLocation = AnimalBehavior.countOfAliveVictims(listCurrentLocation, plant);
-                    int maxPlantOnLocation = AnimalInfo.getMaxAnimalCount(plant);
-                    if((addedPlantCount + plantOnCurrentLocation) <= maxPlantOnLocation) // условие добавления на текущую локацию травы
-                    {
 
-                        listCurrentLocation.addAll(plantAdded);
-                    }
-                    else {
-                        for (int k = 0; k < (maxPlantOnLocation - plantOnCurrentLocation); k++)
-                        {
-                            listCurrentLocation.add(plantAdded.get(k));
-                        }
-                    }
+                    setPlant(listCurrentLocation);
                     Collections.sort(listCurrentLocation,new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
                     System.out.println("Список животных в конце дня " + listCurrentLocation);
                     System.out.println("Локация с координатами x= " + i + " и y= " + j + " обработана");

@@ -89,3 +89,9 @@ public class MultiThreadingAnimalBehavior
     }
 
 }
+class TestMT
+{
+    public static void main(String[] args) {
+
+    }
+}
