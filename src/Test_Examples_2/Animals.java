@@ -4,14 +4,12 @@ package Test_Examples_2;
 import java.util.Comparator;
 import java.util.Objects;
 
-abstract class Living_Entity // для создания абстрактных типов животных
+abstract class LivingEntity // для создания абстрактных типов животных
 {
     abstract void multiplay(boolean multiplay);
     abstract boolean isMultiplay();
     abstract boolean isDead();
     abstract void setDead(boolean dead);
-    private boolean isMove;
-
     abstract boolean isMove();
 
 
@@ -23,7 +21,7 @@ abstract class Living_Entity // для создания абстрактных �
         return name;
     }
 }
-abstract class Animal extends Living_Entity // животные
+abstract class Animal extends LivingEntity // животные
 {
     @Override
     boolean isMove() {
@@ -35,7 +33,6 @@ abstract class Animal extends Living_Entity // животные
 
     }
 
-    int count;
     String name;
     abstract void eat();
     abstract void hungry();
@@ -84,7 +81,6 @@ public class Animals extends Animal// для создания конкретны
 
     }
 
-    int count;
     @Override
     void multiplay(boolean multiplay) {
 
@@ -114,7 +110,7 @@ public class Animals extends Animal// для создания конкретны
     @Override
     public void hungry() {}
 
-    class Plant extends Living_Entity // трава
+    class Plant extends LivingEntity // трава
     {
         @Override
         boolean isMove() {
@@ -170,7 +166,7 @@ public class Animals extends Animal// для создания конкретны
         {
             name = "Plant";
             this.isDead = false;
-            count = Animal_Info.COUNTER_PLANT.incrementAndGet();
+            count = AnimalInfo.COUNTER_PLANT.incrementAndGet();
         }
 
         public String getName() {
@@ -353,7 +349,7 @@ public class Animals extends Animal// для создания конкретны
             this.isDead = false;
             this.multiplay = false;
             this.isMove = false;
-            count = Animal_Info.COUNTER_WOLF.incrementAndGet();
+            count = AnimalInfo.COUNTER_WOLF.incrementAndGet();
         }
         int count;
     }
@@ -436,7 +432,7 @@ public class Animals extends Animal// для создания конкретны
             this.isDead = false;
             this.multiplay = false;
             this.isMove = false;
-            count = Animal_Info.COUNTER_BOA.incrementAndGet();
+            count = AnimalInfo.COUNTER_BOA.incrementAndGet();
         }
         int count;
     }
@@ -519,7 +515,7 @@ public class Animals extends Animal// для создания конкретны
             this.isDead = false;
             this.multiplay = false;
             this.isMove = false;
-            count = Animal_Info.COUNTER_FOX.incrementAndGet();
+            count = AnimalInfo.COUNTER_FOX.incrementAndGet();
         }
         int count;
     }
@@ -602,7 +598,7 @@ public class Animals extends Animal// для создания конкретны
             this.isDead = false;
             this.multiplay = false;
             this.isMove = false;
-            count = Animal_Info.COUNTER_BEAR.incrementAndGet();
+            count = AnimalInfo.COUNTER_BEAR.incrementAndGet();
         }
         int count;
     }
@@ -685,7 +681,7 @@ public class Animals extends Animal// для создания конкретны
             this.isDead = false;
             this.multiplay = false;
             this.isMove = false;
-            count = Animal_Info.COUNTER_EAGLE.incrementAndGet();
+            count = AnimalInfo.COUNTER_EAGLE.incrementAndGet();
         }
         int count;
     }
@@ -767,7 +763,7 @@ public class Animals extends Animal// для создания конкретны
             this.multiplay = false;
             this.isMove = false;
             current_Saturation = max_Saturation;
-            count = Animal_Info.COUNTER_HORSE.incrementAndGet();
+            count = AnimalInfo.COUNTER_HORSE.incrementAndGet();
         }
         int count;
     }
@@ -848,7 +844,7 @@ public class Animals extends Animal// для создания конкретны
             this.multiplay = false;
             this.isMove = false;
             current_Saturation = max_Saturation;
-            count = Animal_Info.COUNTER_DEER.incrementAndGet();
+            count = AnimalInfo.COUNTER_DEER.incrementAndGet();
         }
         int count;
     }
@@ -929,7 +925,7 @@ public class Animals extends Animal// для создания конкретны
             this.multiplay = false;
             this.isMove = false;
             current_Saturation = max_Saturation;
-            count = Animal_Info.COUNTER_RABBIT.incrementAndGet();
+            count = AnimalInfo.COUNTER_RABBIT.incrementAndGet();
         }
         int count;
     }
@@ -1010,7 +1006,7 @@ public class Animals extends Animal// для создания конкретны
             this.multiplay = false;
             this.isMove = false;
             current_Saturation = max_Saturation;
-            count = Animal_Info.COUNTER_MOUSE.incrementAndGet();
+            count = AnimalInfo.COUNTER_MOUSE.incrementAndGet();
         }
         int count;
 
@@ -1092,7 +1088,7 @@ public class Animals extends Animal// для создания конкретны
             this.multiplay = false;
             this.isMove = false;
             current_Saturation = max_Saturation;
-            count = Animal_Info.COUNTER_GOAT.incrementAndGet();
+            count = AnimalInfo.COUNTER_GOAT.incrementAndGet();
         }
         int count;
 
@@ -1173,7 +1169,7 @@ public class Animals extends Animal// для создания конкретны
             this.multiplay = false;
             this.isMove = false;
             current_Saturation = max_Saturation;
-            count = Animal_Info.COUNTER_SHEEP.incrementAndGet();
+            count = AnimalInfo.COUNTER_SHEEP.incrementAndGet();
         }
         int count;
     }
@@ -1254,7 +1250,7 @@ public class Animals extends Animal// для создания конкретны
             this.multiplay = false;
             this.isMove = false;
             current_Saturation = max_Saturation;
-            count = Animal_Info.COUNTER_HOG.incrementAndGet();
+            count = AnimalInfo.COUNTER_HOG.incrementAndGet();
         }
         int count;
     }
@@ -1330,7 +1326,7 @@ public class Animals extends Animal// для создания конкретны
             this.multiplay = false;
             this.isMove = false;
             current_Saturation = max_Saturation;
-              count = Animal_Info.COUNTER_BUFFALO.incrementAndGet();
+              count = AnimalInfo.COUNTER_BUFFALO.incrementAndGet();
         }
         int count;
         boolean isDead;
@@ -1418,7 +1414,7 @@ public class Animals extends Animal// для создания конкретны
             this.multiplay = false;
             this.isMove = false;
             current_Saturation = max_Saturation;
-            count = Animal_Info.COUNTER_DUCK.incrementAndGet();
+            count = AnimalInfo.COUNTER_DUCK.incrementAndGet();
         }
 
         public double getMax_Saturation() {
@@ -1481,7 +1477,7 @@ public class Animals extends Animal// для создания конкретны
             name = "Caterpillar";
             this.isDead = false;
             this.multiplay = false;
-            count = Animal_Info.COUNTER_CATERPILLAR.incrementAndGet();
+            count = AnimalInfo.COUNTER_CATERPILLAR.incrementAndGet();
         }
 
 
@@ -1493,19 +1489,19 @@ public class Animals extends Animal// для создания конкретны
         }
     }
 }
-class AnimalNameComparator implements Comparator<Living_Entity> // класс для сравнения отдельных экземпляров по имени класса
+class AnimalNameComparator implements Comparator<LivingEntity> // класс для сравнения отдельных экземпляров по имени класса
 {
     @Override
-    public int compare(Living_Entity o1, Living_Entity o2)
+    public int compare(LivingEntity o1, LivingEntity o2)
     {
         int toStringCompare = o1.getName().compareTo(o2.getName());
         return  toStringCompare;
     }
 }
-class AnimalCountComparator implements Comparator<Living_Entity> // класс для сравнения отдельных экземпляров по порядковому номеру животного
+class AnimalCountComparator implements Comparator<LivingEntity> // класс для сравнения отдельных экземпляров по порядковому номеру животного
 {
     @Override
-    public int compare(Living_Entity o1, Living_Entity o2)
+    public int compare(LivingEntity o1, LivingEntity o2)
     {
         return  Integer.compare(o1.count, o2.count);
     }
