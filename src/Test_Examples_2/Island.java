@@ -1,8 +1,5 @@
 package Test_Examples_2;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -68,6 +65,7 @@ public class Island // создание острова
     else
     return listToRelocate; // метод возвращает список для релокации
     }
+
 }
 class Location // создание отдельной локации для организации передвижения животных
 {

@@ -13,125 +13,112 @@ public class ConcurrentAnimalBehavior
     public volatile boolean firstLock;
     public volatile boolean secondLock;
 
+
     Lock lock;
+    static CountDownLatch count;
+    static CountDownLatch countFirst;
+    static CountDownLatch countSecond;
+//    static String plant = "Plant";
+//    static String caterpillar = "Caterpillar";
+//    private Location[][] island;
 
-    CountDownLatch count;
-    static String plant = "Plant";
-    static String caterpillar = "Caterpillar";
-
-    public void allMethods()
+    public void allMethods(Location[][] island, int day, Lock lock)
     {
-        resetAnimalState();
-        animalConcurrentBehavior();
-        printStatistics();
+
+        count = new CountDownLatch(3);
+        countFirst = countSecond = count;
         count.countDown();
-    }
-
-    public void resetAnimalState()
-    {
-        synchronized (lock)
+        ExecutorService resetExecutors = Executors.newFixedThreadPool((island.length) * (island[0].length));
+        ExecutorService behaviorExecutors = Executors.newFixedThreadPool((island.length) * (island[0].length));
+        for (int i = 0; i < day; i++)
         {
-            try {
-                while (!firstLock && !secondLock)
-                {
-                    lock.wait();
-                }
-                System.out.println("Метод resetAnimalState");
 
-                firstLock = false;
-                lock.notifyAll();
+                System.out.println("На острове начался " + (i+1) + " день.");
 
-            } catch (InterruptedException e) {
-                System.out.println(e.getCause());
-            }
+                resetAnimalState(island, resetExecutors);
+
+                animalConcurrentBehavior(island, behaviorExecutors);
+
+                printStatistics(island, lock);
+
+                System.out.println("На острове закончился " + (i + 1) + " день.");
+                System.out.println();
+
         }
+        resetExecutors.shutdown();
+        behaviorExecutors.shutdown();
+
     }
 
-    public void animalConcurrentBehavior() {
-        synchronized (lock) {
-            try {
-
-                while (firstLock) {
-                    lock.wait();
-                }
-                System.out.println("Метод animalConcurrentBehavior");
-
-                secondLock = false;
-                lock.notifyAll();
-
-            } catch (InterruptedException e) {
-                System.out.println(e.getCause());
-            }
-        }
-    }
-
-    public void printStatistics()
+    public  void resetAnimalState(Location[][] island, ExecutorService resetExecutors) // сброс состояний isMove и isMultiplay в локациях
     {
-        synchronized (lock)
-        {
-            try {
-                while (secondLock)
+
+
+        System.out.println("Метод resetAnimalState");
+
+                for (int i = 0; i < island.length; i++)
                 {
-                    lock.wait();
+                    for (int j = 0; j < island[i].length; j++)
+                    {
+                        List<LivingEntity> list = island[i][j].getList();
+
+                        resetExecutors.submit(new AnimalStateReset(list));
+
+                    }
                 }
-                System.out.println("Метод printStatistics");
 
-                firstLock = true;
-                secondLock = true;
-                lock.notifyAll();
-            } catch (InterruptedException e) {
-                System.out.println(e.getCause());
-            }
-        }
     }
 
-
-
-    class StateReset implements Runnable
+    public  void animalConcurrentBehavior(Location[][] island, ExecutorService behaviorExecutors)
     {
-        Location[][] island;
 
-        int x;
-        int y;
 
-        @Override
-        public void run() {
-            System.out.println("StateReset");
-        }
+        for (int i = 0; i < island.length; i++)
+                {
+                    for (int j = 0; j < island[i].length; j++)
+                    {
+                        List<LivingEntity> list = island[i][j].getList();
+
+                        behaviorExecutors.submit(new AnimalConcurrentBehavior(list, island, i, j));
+
+                    }
+                }
+
     }
 
-    class AnimalLife implements Runnable {
-        Location[][] island;
+    public  void printStatistics(Location[][] island, Lock lock)
+    {
 
-        int x;
-        int y;
 
-        @Override
-        public void run() {
-            System.out.println("AnimalLife");
-        }
+        System.out.println("Метод printStatistics ");
+                AnimalStatistics as = new AnimalStatistics(island, lock);
+                as.runStats();
+
     }
 
-    class AnimalStateReset implements Runnable {
+
+
+
+    class AnimalStateReset implements Runnable
+    {
         List<LivingEntity> listCurrentLocation;
-        Location[][] island;
+
+        public AnimalStateReset(List<LivingEntity> listCurrentLocation)
+        {
+            this.listCurrentLocation = listCurrentLocation;
+        }
+
         @Override
         public void run()
         {
-            System.out.println("AnimalStateReset");
-            for (int i = 0; i < island.length; i++)
-            {
-                for (int j = 0; j < island[i].length; j++)
-                {
-                    listCurrentLocation = island[i][j].getList();
-                    AnimalBehavior.resetMultiPlayState(listCurrentLocation);
-                    AnimalBehavior.resetMoveState(listCurrentLocation);
-                }
-            }
+            AnimalBehavior.resetMultiPlayState(listCurrentLocation);
+            AnimalBehavior.resetMoveState(listCurrentLocation);
+
         }
     }
 
-    class AnimalConcurrentBehavior implements Runnable {
+    class AnimalConcurrentBehavior implements Runnable
+    {
         List<LivingEntity> listCurrentLocation;
 
         Location[][] island;
@@ -141,7 +128,8 @@ public class ConcurrentAnimalBehavior
         static String plant = "Plant";
         static String caterpillar = "Caterpillar";
 
-        public AnimalConcurrentBehavior(List<LivingEntity> listCurrentLocation, Location[][] island, int i, int j) {
+        public AnimalConcurrentBehavior(List<LivingEntity> listCurrentLocation, Location[][] island, int i, int j)
+        {
             this.listCurrentLocation = listCurrentLocation;
             this.island = island;
             this.i = i;
@@ -159,14 +147,14 @@ public class ConcurrentAnimalBehavior
                 /*
                 Проверка на голодную смерть
                  */
-            System.out.println("Проверка на голодную смерть");
+            //System.out.println("Проверка на голодную смерть");
             AnimalBehavior.hungryDeath(listCurrentLocation, copyList);
             AnimalBehavior.removeFromList(listCurrentLocation);
             copyList.clear();
                 /*
                 Питание животных
                  */
-            System.out.println("Животные кушают");
+            //System.out.println("Животные кушают");
             AnimalBehavior.eatAnimalBehavior(listCurrentLocation);
 
             AnimalBehavior.removeFromList(listCurrentLocation);
@@ -174,19 +162,19 @@ public class ConcurrentAnimalBehavior
                 /*
                 Размножение животных
                  */
-            System.out.println("Животные размножаются");
+            //System.out.println("Животные размножаются");
             AnimalBehavior.multiPlayAnimalBehavior(listCurrentLocation, newBorn);
             listCurrentLocation.addAll(newBorn);
                 /*
                 Передвижение животных
                  */
-            System.out.println("Животные передвигаются");
+            //System.out.println("Животные передвигаются");
             AnimalBehavior.moveAnimalBehavior(listCurrentLocation, island, i, j);
 
                 /*
                 Добавление травы на следующий ход
                  */
-            System.out.println("Добавление травы на локацию на следующий ход");
+            //System.out.println("Добавление травы на локацию на следующий ход");
             AnimalBehavior.setPlant(listCurrentLocation);
             Collections.sort(listCurrentLocation, new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
             //System.out.println("Список животных в конце дня " + listCurrentLocation);
@@ -262,7 +250,7 @@ class TestCAB
     {
         int x = 3;
         int y = 3;
-        int time = 4;
+       final int time = 4;
         Location[][] island = Island.createIsland(x, y);
 
         ConcurrentAnimalBehavior cab = new ConcurrentAnimalBehavior();
@@ -270,11 +258,12 @@ class TestCAB
         cab.firstLock = true;
         cab.secondLock = true;
         cab.lock = new ReentrantLock();
-        for (int i = 0; i < time; i++)
-        {
+        ConcurrentAnimalBehavior.AnimalStatistics cabas = new ConcurrentAnimalBehavior.AnimalStatistics(island, cab.lock);
+        cabas.runStats();
 
-            cab.allMethods();
-        }
+        cab.allMethods(island, time, cab.lock);
+
+        cabas.runStats();
 
     }
-}
+    }
