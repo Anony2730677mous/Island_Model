@@ -1,6 +1,8 @@
 package Test_Examples_2;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -9,20 +11,23 @@ public class MultiThreadingAnimalBehavior
 
     int day;
 
-    private volatile boolean firstLock = true;
-    private volatile boolean secondLock = true;
+    private volatile boolean firstLock;
+    private volatile boolean secondLock;
     final Lock lock = new ReentrantLock();
-    CountDownLatch count = new CountDownLatch(day);
+    CountDownLatch count = new CountDownLatch(3);
 
     public void runAllMethods(int day, Location[][] island)
     {
+
         for (int k = 0; k < day; k++)
         {
+            firstLock = true;
+            secondLock = true;
             resetAnimalState1();
             animalConcurrentBehavior1();
             printStatistics1(island);
             System.out.println("на острове закончился " + (k + 1) + " день");
-            count.countDown();
+
 
         }
     }
@@ -35,6 +40,7 @@ public class MultiThreadingAnimalBehavior
                 {
                     lock.wait();
                 }
+
                 System.out.println("Метод resetAnimalState");
 
                 firstLock = false;
@@ -92,6 +98,9 @@ public class MultiThreadingAnimalBehavior
 class TestMT
 {
     public static void main(String[] args) {
-
+        Location[][] island = Island.createIsland(3, 3);
+        int time = 4;
+        MultiThreadingAnimalBehavior mtab = new MultiThreadingAnimalBehavior();
+        mtab.runAllMethods(time, island);
     }
 }
