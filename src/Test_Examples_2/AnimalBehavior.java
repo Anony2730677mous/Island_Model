@@ -378,12 +378,56 @@ public class AnimalBehavior // имитация поведения животн�
             }
         }
     }
+    public static void animalDayBehavior(List<LivingEntity> listCurrentLocation, Location[][] island, int i, int j)
+    {
+        List<LivingEntity> copyList = new CopyOnWriteArrayList<>();
+        List<LivingEntity> newBorn = new CopyOnWriteArrayList<>();
+
+        System.out.println("Список животных в начале дня " + listCurrentLocation);
+
+                /*
+                Проверка на голодную смерть
+                 */
+        System.out.println("Проверка на голодную смерть");
+        AnimalBehavior.hungryDeath(listCurrentLocation, copyList);
+        AnimalBehavior.removeFromList(listCurrentLocation);
+        copyList.clear();
+                /*
+                Питание животных
+                 */
+        System.out.println("Животные кушают");
+        AnimalBehavior.eatAnimalBehavior(listCurrentLocation);
+
+        AnimalBehavior.removeFromList(listCurrentLocation);
+        copyList.clear();
+                /*
+                Размножение животных
+                 */
+        System.out.println("Животные размножаются");
+        AnimalBehavior.multiPlayAnimalBehavior(listCurrentLocation, newBorn);
+                /*
+                Передвижение животных
+                 */
+        System.out.println("Животные передвигаются");
+        AnimalBehavior.moveAnimalBehavior(listCurrentLocation, island, i, j);
+
+                /*
+                Добавление травы на следующий ход
+                 */
+
+        setPlant(listCurrentLocation);
+        Collections.sort(listCurrentLocation,new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
+        System.out.println("Список животных в конце дня " + listCurrentLocation);
+        System.out.println("Локация с координатами x= " + i + " и y= " + j + " обработана");
+    }
+
+
 
     public static void main(String[] args) {
 
 
         Location[][] island = Island.createIsland(3, 3); // создаем остров
-        int dayCount = 6;
+        int dayCount = 3;
         for (int d = 0; d < dayCount; d++)
         {
             System.out.println();
@@ -414,45 +458,46 @@ public class AnimalBehavior // имитация поведения животн�
                 {
 
                     List<LivingEntity> listCurrentLocation = island[i][j].getList(); // на текущей итерации получаем из локации список с животными
-                    List<LivingEntity> copyList = new ArrayList<>();
-                    List<LivingEntity> newBorn = new ArrayList<>();
-
-                    System.out.println("Список животных в начале дня " + listCurrentLocation);
-
-                /*
-                Проверка на голодную смерть
-                 */
-                    System.out.println("Проверка на голодную смерть");
-                    AnimalBehavior.hungryDeath(listCurrentLocation, copyList);
-                    AnimalBehavior.removeFromList(listCurrentLocation);
-                    copyList.clear();
-                /*
-                Питание животных
-                 */
-                    System.out.println("Животные кушают");
-                    AnimalBehavior.eatAnimalBehavior(listCurrentLocation);
-
-                    AnimalBehavior.removeFromList(listCurrentLocation);
-                    copyList.clear();
-                /*
-                Размножение животных
-                 */
-                    System.out.println("Животные размножаются");
-                    AnimalBehavior.multiPlayAnimalBehavior(listCurrentLocation, newBorn);
-                /*
-                Передвижение животных
-                 */
-                    System.out.println("Животные передвигаются");
-                    AnimalBehavior.moveAnimalBehavior(listCurrentLocation, island, i, j);
-
-                /*
-                Добавление травы на следующий ход
-                 */
-
-                    setPlant(listCurrentLocation);
-                    Collections.sort(listCurrentLocation,new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
-                    System.out.println("Список животных в конце дня " + listCurrentLocation);
-                    System.out.println("Локация с координатами x= " + i + " и y= " + j + " обработана");
+//                    List<LivingEntity> copyList = new ArrayList<>();
+//                    List<LivingEntity> newBorn = new ArrayList<>();
+//
+//                    System.out.println("Список животных в начале дня " + listCurrentLocation);
+//
+//                /*
+//                Проверка на голодную смерть
+//                 */
+//                    System.out.println("Проверка на голодную смерть");
+//                    AnimalBehavior.hungryDeath(listCurrentLocation, copyList);
+//                    AnimalBehavior.removeFromList(listCurrentLocation);
+//                    copyList.clear();
+//                /*
+//                Питание животных
+//                 */
+//                    System.out.println("Животные кушают");
+//                    AnimalBehavior.eatAnimalBehavior(listCurrentLocation);
+//
+//                    AnimalBehavior.removeFromList(listCurrentLocation);
+//                    copyList.clear();
+//                /*
+//                Размножение животных
+//                 */
+//                    System.out.println("Животные размножаются");
+//                    AnimalBehavior.multiPlayAnimalBehavior(listCurrentLocation, newBorn);
+//                /*
+//                Передвижение животных
+//                 */
+//                    System.out.println("Животные передвигаются");
+//                    AnimalBehavior.moveAnimalBehavior(listCurrentLocation, island, i, j);
+//
+//                /*
+//                Добавление травы на следующий ход
+//                 */
+//
+//                    setPlant(listCurrentLocation);
+//                    Collections.sort(listCurrentLocation,new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
+//                    System.out.println("Список животных в конце дня " + listCurrentLocation);
+//                    System.out.println("Локация с координатами x= " + i + " и y= " + j + " обработана");
+                    AnimalBehavior.animalDayBehavior(listCurrentLocation, island, i, j);
                 }
 
             }

@@ -125,8 +125,6 @@ public class ConcurrentAnimalBehavior
 
         int i;
         int j;
-        static String plant = "Plant";
-        static String caterpillar = "Caterpillar";
 
         public AnimalConcurrentBehavior(List<LivingEntity> listCurrentLocation, Location[][] island, int i, int j)
         {
@@ -142,7 +140,7 @@ public class ConcurrentAnimalBehavior
 
             List<LivingEntity> copyList = new CopyOnWriteArrayList<>();
             List<LivingEntity> newBorn = new CopyOnWriteArrayList<>();
-            //System.out.println("Список животных в начале дня " + listCurrentLocation);
+
 
                 /*
                 Проверка на голодную смерть
@@ -177,7 +175,7 @@ public class ConcurrentAnimalBehavior
             //System.out.println("Добавление травы на локацию на следующий ход");
             AnimalBehavior.setPlant(listCurrentLocation);
             Collections.sort(listCurrentLocation, new AnimalNameComparator().thenComparing(new AnimalCountComparator()));
-            //System.out.println("Список животных в конце дня " + listCurrentLocation);
+
             System.out.println("Локация с координатами x= " + i + " и y= " + j + " обработана");
         }
 
